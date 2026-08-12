@@ -157,18 +157,19 @@ export function ProductCustomizer({ product }: { product: Product }) {
       {/* Live preview (honest sample) */}
       <div>
         <h3 className="mb-3 font-display text-lg font-semibold text-ink">
-          <Editable eid="customizer.previewTitle" fallback="Preview" />
+          <Editable eid="customizer.previewTitle" fallback="Live Preview" />
         </h3>
         <PreviewPlaceholder
           previewUrl={photo?.previewUrl}
           color={selectedColor}
           petName={selections.petName}
           placement={selections.placement}
+          category={product.category}
         />
         <p className="mt-2 text-[12.5px] text-muted">
           <Editable
             eid="customizer.previewNote"
-            fallback="This is a sample layout to show composition. Final piece is hand-embroidered by our artists."
+            fallback="Preview shows your pet at the selected placement. Final piece is hand-embroidered by our artists — placement is approximate."
           />
         </p>
       </div>

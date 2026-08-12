@@ -23,3 +23,6 @@
 *.pem
 npm-debug.log*
 *.tsbuildinfo
+
+# leftover build cache backup
+.next_bak/
