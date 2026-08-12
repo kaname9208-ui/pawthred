@@ -1,0 +1,25 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# next.js build output
+/.next/
+/out/
+/build
+
+# env files — NEVER commit secrets
+.env
+.env*.local
+
+# keep the example env tracked (no secrets inside)
+!.env.example
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+*.tsbuildinfo

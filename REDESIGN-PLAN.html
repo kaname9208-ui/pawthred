@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>宠物定制刺绣独立站 · 参考分析 + 重设计方案 (Step 1)</title>
+<style>
+  :root{
+    --cream:#FAF7F2; --paper:#FFFFFF; --ink:#1A1A1A; --charcoal:#2B2B2B;
+    --muted:#6B6B6B; --warm:#BD8C5E; --warm-soft:#F1E6D8; --line:#E7E1D8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:"Inter",-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;font-size:15px}
+  .wrap{max-width:980px;margin:0 auto;padding:48px 24px 96px}
+  header.top{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:8px}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;margin:0 0 8px}
+  h2{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:24px;margin:44px 0 14px;
+    padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:17px;margin:22px 0 8px;color:var(--charcoal)}
+  p{margin:8px 0}
+  .sub{color:var(--muted);font-size:14px}
+  .tag{display:inline-block;background:var(--warm-soft);color:#7a5a36;border-radius:999px;
+    padding:3px 12px;font-size:12px;font-weight:600;margin-right:6px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+  th{background:#F6F1EA;font-weight:600}
+  tr:last-child td{border-bottom:none}
+  code{background:#F1ECE4;padding:1px 6px;border-radius:5px;font-size:13px;color:#5a4632}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .good{border-left:4px solid #4F9D69}
+  .warn{border-left:4px solid var(--warm)}
+  .bad{border-left:4px solid #C0584B}
+  ul{margin:8px 0;padding-left:20px}
+  li{margin:5px 0}
+  .muted{color:var(--muted)}
+  .pill{font-size:12px;color:var(--muted)}
+  .note{background:#FBF6EE;border:1px dashed var(--warm);border-radius:10px;padding:14px 16px;margin:16px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .step{display:flex;gap:12px;align-items:flex-start;margin:10px 0}
+  .num{flex:0 0 28px;height:28px;width:28px;border-radius:50%;background:var(--ink);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div><span class="tag">STEP 1 · 规划文档</span><span class="tag">未启动代码</span></div>
+  <h1>宠物定制刺绣独立站<br><span class="muted" style="font-size:20px">参考网站分析 + 重设计方案</span></h1>
+  <p class="sub">参考站：<code>westandwillow.com</code>（其 "Custom Embroidered Pet Clothing" 线即为本项目的直接竞品）<br>
+  目标市场：United States · 语言 EN · 货币 USD · 视觉 Premium + Emotional + Minimal + Warm</p>
+</header>
+
+<!-- ============ A. 参考分析 ============ -->
+<h2>A. 参考网站分析（West &amp; Willow，基于实测）</h2>
+<p>该站是 Shopify 架构的 DTC 定制站，核心卖点 "Turn your pet photo into an illustrated pet portrait, custom-stitched onto apparel"。也就是说，它卖的正是我们要做的<strong>宠物照片 → 数字插画 → 刺绣到衣服</strong>。这是我们最有价值的对标对象。</p>
+
+<div class="card good">
+<h3>① 网站结构（Sitemap）</h3>
+<ul>
+<li><code>/</code> 首页（Hero + Best Sellers + 服装线 + UGC + How It Works + FAQ）</li>
+<li><code>/pages/custom-pet-portraits</code> 单/双/三宠肖像落地页</li>
+<li><code>/pages/custom-pet-apparel</code> 定制服装聚合页</li>
+<li><code>/collections/*</code> 集合页（如 jewelry-accessories）</li>
+<li><code>/products/[slug]</code> 产品页（带 Loox 评价、"Old $X → From $Y" 锚价）</li>
+<li><code>/pages/reviews</code> 评价墙 · <code>/pages/best-sellers</code> · <code>/pages/image-guidelines</code></li>
+<li>Footer 含 Shop / Help / About / Legal / Social / 邮件订阅</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>② 首页布局（从上到下，实测区块）</h3>
+<ol>
+<li>Skip-to-content 可访问性链接 → 公告/导航</li>
+<li><strong>Hero</strong>：大标题 "Custom Pet Portraits" + 主推产品卡（带 Loox 19,141 评价徽标）</li>
+<li><strong>Best Seller 网格</strong>：3 列产品卡，划线价 Old $105 / From $77，Shop Now CTA，Loox 星标+评价数</li>
+<li><strong>Custom Embroidered Pet Clothing</strong> 促销块（说明照片→插画→刺绣的逻辑）</li>
+<li><strong>Featured Accessories</strong> 第二组网格（马克杯/抱枕/crewneck）</li>
+<li><strong>West &amp; Willow In The Wild</strong>：UGC 墙，带 Instagram @handle</li>
+<li><strong>How It Works</strong>：3 步（选照片 → 定制 → 艺术家插画&amp;发货）</li>
+<li><strong>FAQ</strong> 折叠</li>
+<li>Footer</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>③ 产品展示方式</h3>
+<ul>
+<li>卡片统一：正方形/竖向缩略图 + 标题 + <code>Old Price $105.00 From $77.00</code> 划线锚价 + Shop Now</li>
+<li>评价以 <strong>Loox</strong> 徽标呈现（星级 + 大数字，如 19,141 reviews），强社会证明</li>
+<li>Best Seller 角标置于卡片左上</li>
+</ul>
+</div>
+
+<div class="card warn">
+<h3>④ 定制流程（关键差异点）</h3>
+<p>West &amp; Willow 的 How It Works 是 <strong>3 步</strong>：① 选宠物照片（"We accept 98% of all photos!" 降低上传焦虑）② 定制（加名字、背景色、风格、画框尺寸）③ 艺术家插画&amp;发货。</p>
+<p><strong>重要：他们明确"不提供设计预览/proof"</strong>（"we do not offer artwork previews or proofs"）。这恰恰是我们可以差异化的地方——按你的要求提供<strong>诚实的版式预览</strong>（明确标注"示例版式·非最终成品"，不伪造 AI 结果）。</p>
+</div>
+
+<div class="card">
+<h3>⑤ 图片比例 / ⑥ CTA / ⑦ 配色 / ⑧ 字体</h3>
+<ul>
+<li><strong>图片比例</strong>：产品卡竖向（约 4:5），Hero 大图 + 产品卡并置；UGC 方块 1:1</li>
+<li><strong>CTA</strong>：主按钮深色底 "Shop Now" / "Shop Best Sellers"，文案行动导向</li>
+<li><strong>配色</strong>：暖米白背景 + 近黑文字 + 暖色调（出现 Walnut/Charcoal 画框背景描述），克制高级</li>
+<li><strong>字体</strong>：展示标题用衬线（编辑感/高端），正文无衬线；大留白</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>⑨ 用户购买路径</h3>
+<p>Pet Photo 心智 → 选产品（肖像/服装）→ 定制选项 → 加购 → 结算。路径短，但<strong>预览缺失</strong>是信任断点。</p>
+</div>
+
+<div class="card good">
+<h3>⑩ 信任元素 / ⑪ FAQ / ⑫ 评论&amp;UGC / ⑬ Footer / ⑭ 移动端</h3>
+<ul>
+<li><strong>信任</strong>：Loox 海量评价（19k+）、"接受 98% 照片"、30 分钟内可改单的响应式承诺</li>
+<li><strong>FAQ</strong>：照片指南（近景/光线/避免俯拍模糊）、多宠、可改单时限、<strong>为何无预览</strong>（坦诚说明）</li>
+<li><strong>评论/UGC</strong>：星标+Verified Buyer 暗示、UGC "In The Wild" 带 @handle、Browse Reviews 入口</li>
+<li><strong>Footer</strong>：Shop / Help(Contact,FAQ,Shipping,Returns,Size Guide) / About(Story,How It Works) / Legal / Social / 邮件订阅</li>
+<li><strong>移动端</strong>：Skip-to-content、单列堆叠、移动优先的卡片网格（推断，Shopify 主题默认响应式）</li>
+</ul>
+</div>
+
+<!-- ============ B/C/D ============ -->
+<h2>B. UX 优点 &amp; CRO 优点（可借鉴）</h2>
+<div class="grid2">
+<div class="card good">
+<h3>UX 优点</h3>
+<ul>
+<li>大留白 + 编辑式衬线标题，高级感强</li>
+<li>卡片信息密度低，决策成本低</li>
+<li>UGC "In The Wild" 把客户当内容主角</li>
+<li>How It Works 三步可视化，降低认知负荷</li>
+</ul>
+</div>
+<div class="card good">
+<h3>CRO 优点</h3>
+<ul>
+<li><strong>价格锚点</strong>：Old → From 制造划算感</li>
+<li><strong>社会证明密度</strong>：Loox 大数字评价</li>
+<li><strong>上传安抚</strong>："98% 照片可用" 消除顾虑</li>
+<li><strong>FAQ 前置</strong>：在决策前解答疑虑</li>
+<li><strong>多入口 CTA</strong>：Hero / 网格 / 区块反复引导</li>
+</ul>
+</div>
+</div>
+
+<div class="card bad">
+<h3>D. 不应复制（合规红线）</h3>
+<p>以下<strong>一律不复制</strong>：Logo、品牌名 "West &amp; Willow"、所有文案原文、产品图/插画/宠物照片、画框素材、页面源码、Loox 评价数据。我们仅借鉴其<strong>经过市场验证的结构与转化模式</strong>，全部内容自建。</p>
+</div>
+
+<div class="card warn">
+<h3>E. 改进 / 差异化机会（我们的突破口）</h3>
+<ul>
+<li><strong>诚实预览</strong>：提供 "示例版式" 预览（非伪造 AI），填补竞品空白，提升信任</li>
+<li><strong>宠物情绪叙事</strong>：强化 "Your pet is family / 纪念意义 / 礼物惊喜" 的情绪价值</li>
+<li><strong>移动优先上传</strong>：大点击区、进度提示、即时本地预览</li>
+<li><strong>配置集中化</strong>：品牌名/色/字体/图片全部抽到 config，便于换品牌/多品牌</li>
+<li><strong>统一占位图系统</strong>：无真实图也不崩，比例统一防跳动</li>
+</ul>
+</div>
+
+<!-- ============ 重设计方案 ============ -->
+<h2>F. 重新设计方案（本项目的落地蓝图）</h2>
+
+<div class="card">
+<h3>F1 · 品牌与定位</h3>
+<p>临时品牌占位 <code>[BRAND NAME]</code>（代码内用 <code>BRAND_NAME</code> 常量，默认建议 "Paw &amp; Thread"，你随时可改）。核心 Slogan：<em>"Turn your pet into something you can wear."</em> 视觉：米白底 + 墨黑字 + 暖棕点缀，衬线标题 + 无衬线正文，大留白。</p>
+</div>
+
+<div class="card">
+<h3>F2 · Sitemap（路由，复用现有 scaffold 并补完）</h3>
+<table>
+<tr><th>路由</th><th>页面</th><th>状态</th></tr>
+<tr><td><code>/</code></td><td>首页（19 区块）</td><td>已搭骨架，待对齐新文案</td></tr>
+<tr><td><code>/shop</code></td><td>产品集合页</td><td>现有 <code>/products</code>，将更名对齐</td></tr>
+<tr><td><code>/product/[slug]</code></td><td>产品 + 定制页</td><td>已搭（含上传/定制/预览/加购）</td></tr>
+<tr><td><code>/how-it-works</code></td><td>定制流程页</td><td><strong>需新增</strong></td></tr>
+<tr><td><code>/about</code></td><td>品牌故事</td><td>已搭，待强化情绪叙事</td></tr>
+<tr><td><code>/faq</code></td><td>FAQ</td><td>已搭</td></tr>
+<tr><td><code>/contact</code></td><td>联系我们</td><td><strong>需新增</strong></td></tr>
+<tr><td><code>/cart</code> · <code>/checkout</code></td><td>购物车 / 结算</td><td>已搭（Mock）</td></tr>
+<tr><td><code>/reviews</code></td><td>评价墙</td><td>已搭（Demo 标记）</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>F3 · Homepage Wireframe（按你的 19 段结构映射）</h3>
+<ol>
+<li>Announcement Bar — "Free Shipping on Orders $75+"</li>
+<li>Sticky Header（Logo / Shop·Sweatshirts·Hoodies·T-Shirts·How It Works·Our Story·FAQ / Search·Account·Cart · 移动端汉堡）</li>
+<li>Hero — 左宠物真照 / 右刺绣+成衣 Before·After；H1 "Your Pet. Your Story. Embroidered."；CTA "Create Yours" + "See How It Works"</li>
+<li>Shop By Category — Sweatshirts / Hoodies / T-Shirts / Gifts 四卡 + IMAGE_PLACEHOLDER</li>
+<li>Core Value Props — 4 项（Custom Made / Premium Embroidery / Made With Love / Easy To Order）线性 icon</li>
+<li>How It Works — 4 步（Upload → We Create → You Approve → Wear）含 真照→数字刺绣→成衣 视觉流</li>
+<li>Best Sellers 产品网格（划线价 + 星标 + Shop Now）</li>
+<li>Embroidery Close-up 展示块</li>
+<li>Trust / Guarantee 模块（30-Day / Secure / Free Shipping / Quality）</li>
+<li>Review Section（带 Demo 标记的真实感评价）</li>
+<li>UGC "Made for Pet People" Instagram/TikTok 风格墙</li>
+<li>Gift Scene / 情绪叙事块</li>
+<li>FAQ 折叠</li>
+<li>Email Subscribe（10% Off）</li>
+<li>Footer</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>F4 · Design System（令牌，集中到 <code>site.config.ts</code> + Tailwind）</h3>
+<table>
+<tr><th>维度</th><th>取值</th></tr>
+<tr><td>Colors</td><td>cream <code>#FAF7F2</code> · ink <code>#1A1A1A</code> · charcoal <code>#2B2B2B</code> · muted <code>#6B6B6B</code> · warm accent <code>#BD8C5E</code> · line <code>#E7E1D8</code></td></tr>
+<tr><td>Typography</td><td>Display 衬线 <code>Fraunces</code>（next/font）· Body 无衬线 <code>Inter</code></td></tr>
+<tr><td>Spacing</td><td>4px 基准；区块 <code>py-20/24</code> 大留白</td></tr>
+<tr><td>Buttons</td><td>Primary 墨底奶字、大点击区；Secondary 描边；移动端 Sticky 底栏 CTA</td></tr>
+<tr><td>Cards</td><td>白底 + 细边 + 柔和阴影 + 统一圆角</td></tr>
+<tr><td>Forms</td><td>大输入框、清晰标签、上传 Dropzone</td></tr>
+<tr><td>Icons</td><td>极简线性 icon（lucide-react）</td></tr>
+<tr><td>Image ratio</td><td>产品卡 4:5 · Hero 4:5 分屏 · UGC 1:1 · Gallery 4:5/1:1 混排</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>F5 · 技术栈复用 &amp; 现有 scaffold 状态</h3>
+<p>沿用 <strong>Next.js 14 (App Router) + React + TypeScript + Tailwind</strong>，与你的要求一致，不换栈。现有 <code>pet-embroidery/</code> 已写好源码（app/components/lib 共 30+ 文件），含：集中 <code>site.config.ts</code>、Mock 数据、<code>CartProvider</code>、全局 <code>ImagePlaceholder</code>、上传/预览/Sticky CTA/定制器组件。<strong>当前 node_modules 未安装</strong>，构建阶段会重装依赖并跑通。</p>
+<p class="muted">需补：新增 <code>/how-it-works</code>、<code>/contact</code> 页；将 <code>/products</code> 对齐为 <code>/shop</code>；确保 mock 数据含 slug <code>custom-pet-sweatshirt</code>。</p>
+</div>
+
+<div class="card warn">
+<h3>F6 · Mock / 接口策略（无 API Key 时的诚实处理）</h3>
+<ul>
+<li><strong>产品/评价</strong>：静态 mock 数据（<code>lib/data/*</code>），评价明确标 <code>Demo / 示例评价</code>，绝不伪造真实消费者</li>
+<li><strong>购物车</strong>：客户端 Context + localStorage，无后端</li>
+<li><strong>上传照片</strong>：纯前端 <code>FileReader → object URL</code> 本地预览，不上传服务器</li>
+<li><strong>预览</strong>：诚实 "示例版式 · 非最终成品" 占位（可选叠加画框+名字文字），<strong>不伪装 AI 生成</strong></li>
+<li><strong>结算</strong>：Mock 表单 → 订单确认页；真实支付(Stripe/Shopify)待你提供 Key 后接入</li>
+</ul>
+<div class="note">缺失 API 不会阻塞建站。后续接入点已在 <code>lib/api/client.ts</code> 用 <code>USE_MOCK</code> 开关预留（products / upload / preview / orders）。</div>
+</div>
+
+<div class="card good">
+<h3>F7 · 合规与诚实原则（贯穿全程）</h3>
+<ul>
+<li>不复制任何竞品素材（Logo/名/文案/图/源码）</li>
+<li>Preview 永远标注"示例版式，非成品"，避免误导</li>
+<li>评价标注 Demo，避免虚假宣传</li>
+<li>SEO 文案原创、不堆砌关键词</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>F8 · QA &amp; 交付里程碑（对应你的 Step 1–9）</h3>
+<div class="step"><span class="num">1</span><div><strong>分析参考站</strong> — 本文档（已完成本步）</div></div>
+<div class="step"><span class="num">2</span><div><strong>Sitemap + Homepage Wireframe</strong> — 见 F2/F3</div></div>
+<div class="step"><span class="num">3</span><div><strong>Design System</strong> — 见 F4</div></div>
+<div class="step"><span class="num">4</span><div><strong>开发</strong>（重装依赖、补页、对齐文案）</div></div>
+<div class="step"><span class="num">5</span><div><strong>首页</strong> 完成</div></div>
+<div class="step"><span class="num">6</span><div><strong>产品页 + 定制流程</strong> 完成（上传→选品→定制→预览→加购）</div></div>
+<div class="step"><span class="num">7</span><div><strong>其余页面</strong>（how-it-works/contact/about/faq/cart/checkout/reviews）</div></div>
+<div class="step"><span class="num">8</span><div><strong>Mobile/Desktop QA</strong></div></div>
+<div class="step"><span class="num">9</span><div><strong>检查清单</strong>：无报错 / 图不溢出 / 移动正常 / CTA 正常 / 上传正常 / 购物车正常 / 链接正常 / SEO metadata 存在 / Console 无 Error</div></div>
+</div>
+
+<div class="note">
+<strong>下一步：</strong>本步只做分析与规划，<strong>未写入任何应用代码</strong>。请你确认方案（尤其品牌占位名、路由命名 <code>/shop</code> vs <code>/products</code>、是否新增 /contact /how-it-works）。确认后我即按 F4–F8 进入开发，先重装依赖并跑通主路径。
+</div>
+
+</div>
+</body>
+</html>
