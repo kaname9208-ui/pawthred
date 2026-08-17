@@ -1,67 +1,20 @@
-import type { Product, CustomizeOption } from "@/lib/types";
+import { list, put } from "@vercel/blob";
+import type { Product } from "@/lib/types";
+import {
+  colorOption,
+  sizeOption,
+  placementOption,
+  petNameOption,
+} from "@/lib/data/options";
 
-// 共享定制选项模板（满足 brief §十 的定制模块要求）
-const sizes: CustomizeOption["choices"] = [
-  { value: "XS", label: "XS" },
-  { value: "S", label: "S" },
-  { value: "M", label: "M" },
-  { value: "L", label: "L" },
-  { value: "XL", label: "XL" },
-  { value: "2XL", label: "2XL" },
-  { value: "3XL", label: "3XL" },
-];
+// 商品数据现在由「后台 admin」管理，存到 Vercel Blob 的 catalog/products.json（public）。
+// 读取失败时回退到下面的 SEED_PRODUCTS，保证站点在后台尚未写入任何数据前也能正常显示。
 
-const placements: CustomizeOption["choices"] = [
-  { value: "left-chest", label: "Left Chest" },
-  { value: "center", label: "Center" },
-  { value: "sleeve", label: "Sleeve" },
-];
+const CATALOG_PATH = "catalog/products.json";
 
-function colorOption(colors: CustomizeOption["choices"]): CustomizeOption {
-  return { id: "color", label: "Color", type: "select", required: true, choices: colors };
-}
-const sizeOption: CustomizeOption = {
-  id: "size",
-  label: "Size",
-  type: "select",
-  required: true,
-  choices: sizes,
-};
-const placementOption: CustomizeOption = {
-  id: "placement",
-  label: "Embroidery Placement",
-  type: "select",
-  required: true,
-  choices: placements,
-};
-const textOption: CustomizeOption = {
-  id: "petName",
-  label: "Add your pet's name (optional)",
-  type: "text",
-  placeholder: "e.g. MAX",
-};
-
-const C = {
-  cream: { value: "cream", label: "Cream", swatch: "#F3ECE0" },
-  black: { value: "black", label: "Black", swatch: "#1A1A1A" },
-  grey: { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
-  sage: { value: "sage", label: "Sage", swatch: "#C7CDBF" },
-  rose: { value: "dusty-rose", label: "Dusty Rose", swatch: "#D8B7AE" },
-  navy: { value: "navy", label: "Navy", swatch: "#2C3A4B" },
-};
-
-function apparel(p: Omit<Product, "options"> & { colors: CustomizeOption["choices"] }): Product {
-  const { colors, ...rest } = p;
-  return {
-    ...rest,
-    options: [colorOption(colors), sizeOption, placementOption, textOption],
-  };
-}
-
-// Mock 产品数据 —— 全部原创，无任何参考站图片/文案复制
-// 当前在售 3 款（按用户要求）：T恤 → 圆领卫衣 → 袜子
-export const products: Product[] = [
-  apparel({
+// ---- 初始种子数据（与后台未写入前一致） ----
+export const SEED_PRODUCTS: Product[] = [
+  {
     slug: "custom-pet-t-shirt",
     name: "Custom Pet Embroidered T-Shirt",
     category: "t-shirts",
@@ -76,9 +29,19 @@ export const products: Product[] = [
     description:
       "A lightweight combed-cotton tee with a refined pet portrait embroidery on the chest. Breathable, everyday comfort with a story only you know.",
     perExtraPet: 10,
-    colors: [C.cream, C.black, C.grey, C.sage],
-  }),
-  apparel({
+    options: [
+      colorOption([
+        { value: "cream", label: "Cream", swatch: "#F3ECE0" },
+        { value: "black", label: "Black", swatch: "#1A1A1A" },
+        { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
+        { value: "sage", label: "Sage", swatch: "#C7CDBF" },
+      ]),
+      sizeOption,
+      placementOption,
+      petNameOption,
+    ],
+  },
+  {
     slug: "custom-pet-crewneck",
     name: "Custom Pet Embroidered Crewneck",
     category: "crewnecks",
@@ -93,9 +56,20 @@ export const products: Product[] = [
     description:
       "A timeless crewneck sweater with your pet's portrait stitched at the chest. Clean lines, premium cotton blend, and a fit that works for any season.",
     perExtraPet: 12,
-    colors: [C.cream, C.black, C.grey, C.sage, C.navy],
-  }),
-  apparel({
+    options: [
+      colorOption([
+        { value: "cream", label: "Cream", swatch: "#F3ECE0" },
+        { value: "black", label: "Black", swatch: "#1A1A1A" },
+        { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
+        { value: "sage", label: "Sage", swatch: "#C7CDBF" },
+        { value: "navy", label: "Navy", swatch: "#2C3A4B" },
+      ]),
+      sizeOption,
+      placementOption,
+      petNameOption,
+    ],
+  },
+  {
     slug: "custom-pet-socks",
     name: "Custom Pet Embroidered Socks",
     category: "socks",
@@ -110,15 +84,70 @@ export const products: Product[] = [
     description:
       "Soft combed-cotton crew socks with your pet's face embroidered at the ankle. Cushioned sole, stay-up fit, and a small daily dose of joy with every step.",
     perExtraPet: 6,
-    colors: [C.cream, C.black, C.grey, C.sage, C.navy],
-  }),
+    options: [
+      colorOption([
+        { value: "cream", label: "Cream", swatch: "#F3ECE0" },
+        { value: "black", label: "Black", swatch: "#1A1A1A" },
+        { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
+        { value: "sage", label: "Sage", swatch: "#C7CDBF" },
+        { value: "navy", label: "Navy", swatch: "#2C3A4B" },
+      ]),
+      sizeOption,
+      placementOption,
+      petNameOption,
+    ],
+  },
 ];
 
-export function getProduct(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+// ---- 从 Blob 读取商品目录 ----
+async function readCatalog(): Promise<Product[] | null> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) return null;
+  try {
+    const { blobs } = await list({ token, prefix: CATALOG_PATH });
+    const found = blobs.find((b) => b.pathname === CATALOG_PATH) ?? blobs[0];
+    if (!found) return null;
+    const res = await fetch(found.url, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    const json = (await res.json()) as Product[];
+    return Array.isArray(json) ? json : null;
+  } catch {
+    return null;
+  }
 }
 
-export function getByCategory(cat?: string): Product[] {
-  if (!cat || cat === "all") return products;
-  return products.filter((p) => p.category === cat);
+// 后台读写原语（storefront 与 admin 共用）
+export async function readCatalogRaw(): Promise<Product[] | null> {
+  return readCatalog();
+}
+
+export async function writeCatalogRaw(products: Product[]): Promise<void> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) throw new Error("BLOB_READ_WRITE_TOKEN is not configured.");
+  await put(CATALOG_PATH, JSON.stringify(products, null, 2), {
+    access: "public",
+    token,
+    contentType: "application/json",
+    allowOverwrite: true,
+  });
+}
+
+// ---- 同步导出（供首页/组件直接使用，无需 await） ----
+// 后台写入 Blob 前使用种子数据；后台上线后建议改为异步读取。
+export const products = SEED_PRODUCTS;
+
+// ---- 对外异步接口（原同步函数名保留，改为 async） ----
+export async function getProducts(): Promise<Product[]> {
+  return (await readCatalog()) ?? SEED_PRODUCTS;
+}
+
+export async function getProduct(slug: string): Promise<Product | undefined> {
+  const all = await getProducts();
+  return all.find((p) => p.slug === slug);
+}
+
+export async function getByCategory(cat?: string): Promise<Product[]> {
+  const all = await getProducts();
+  if (!cat || cat === "all") return all;
+  return all.filter((p) => p.category === cat);
 }

@@ -5,7 +5,6 @@ import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
 import { PhotoUploader } from "@/components/PhotoUploader";
-import { PreviewPlaceholder } from "@/components/PreviewPlaceholder";
 import { StickyCartCTA } from "@/components/StickyCartCTA";
 import { Editable } from "@/components/editable/Editable";
 import { cn } from "@/lib/format";
@@ -27,11 +26,6 @@ export function ProductCustomizer({ product }: { product: Product }) {
   const price = useMemo(() => {
     return product.priceFrom + (petCount - 1) * product.perExtraPet;
   }, [product, petCount]);
-
-  const colorChoice = product.options
-    .find((o) => o.id === "color")
-    ?.choices?.find((c) => c.value === selections.color);
-  const selectedColor = colorChoice?.swatch ?? "#F3ECE0";
 
   function setOpt(id: string, value: string) {
     setSelections((s) => ({ ...s, [id]: value }));
@@ -152,26 +146,6 @@ export function ProductCustomizer({ product }: { product: Product }) {
             )}
           </div>
         ))}
-      </div>
-
-      {/* Live preview (honest sample) */}
-      <div>
-        <h3 className="mb-3 font-display text-lg font-semibold text-ink">
-          <Editable eid="customizer.previewTitle" fallback="Live Preview" />
-        </h3>
-        <PreviewPlaceholder
-          previewUrl={photo?.previewUrl}
-          color={selectedColor}
-          petName={selections.petName}
-          placement={selections.placement}
-          category={product.category}
-        />
-        <p className="mt-2 text-[12.5px] text-muted">
-          <Editable
-            eid="customizer.previewNote"
-            fallback="Preview shows your pet at the selected placement. Final piece is hand-embroidered by our artists — placement is approximate."
-          />
-        </p>
       </div>
 
       {/* Price + Add (desktop) */}

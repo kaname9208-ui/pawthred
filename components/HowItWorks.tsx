@@ -1,85 +1,89 @@
-import { howItWorks } from "@/lib/data/content";
+import Image from "next/image";
 import { Editable } from "@/components/editable/Editable";
 
-function StepIcon({ name }: { name: string }) {
-  const c = {
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "#1A1A1A",
-    strokeWidth: 1.6,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  if (name === "upload")
-    return (
-      <svg {...c}>
-        <path d="M12 16V4m0 0L8 8m4-4l4 4" />
-        <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
-      </svg>
-    );
-  if (name === "brush")
-    return (
-      <svg {...c}>
-        <path d="M4 20s1-4 4-4 3-5 6-8c1.5-1.5 4-2 4-2s-.5 2.5-2 4-8 4-8 6-4 4-4 4z" />
-      </svg>
-    );
-  if (name === "check")
-    return (
-      <svg {...c}>
-        <path d="M5 12l4 4 10-10" />
-      </svg>
-    );
-  return (
-    <svg {...c}>
-      <path d="M8 3l-2 4 3 1 2-4zM16 8l-2 4 3 1 2-4zM12 14l-2 4 3 1 2-4z" />
-      <path d="M4 21h16" />
-    </svg>
-  );
-}
+const steps = [
+  {
+    step: "第一步",
+    title: "上传您的照片",
+    text: "选择你最喜欢的宠物照片。清晰、光线充足的镜头效果最佳——我们几乎接受所有镜头。",
+    img: "/how-it-works/step1-upload-photo.png",
+    imgAlt: "Customer uploads their pet photo",
+    imgLeft: false,
+  },
+  {
+    step: "第二步",
+    title: "我们为您设计",
+    text: "我们的艺术家会将您的照片改编成定制刺绣设计，与您的服装和颜色相匹配。",
+    img: "/how-it-works/step2-design.png",
+    imgAlt: "Digital embroidery design of pet portrait",
+    imgLeft: true,
+  },
+  {
+    step: "第三步",
+    title: "你批准了",
+    text: "在生产前检查你的设计。变动很容易——我们希望它恰到好处。",
+    img: "/how-it-works/step3-approve.png",
+    imgAlt: "Close-up of embroidered pet patch",
+    imgLeft: true,
+  },
+  {
+    step: "第四步",
+    title: "穿上你的故事",
+    text: "您的定制作品会被刺绣并寄送到家门口，准备成为日常生活的一部分。",
+    img: "/how-it-works/step4-wear.png",
+    imgAlt: "Person wearing apparel with embroidered pet",
+    imgLeft: false,
+  },
+];
 
 export function HowItWorks() {
   return (
-    <section className="container-page section">
-      <div className="mb-12 text-center">
-        <span className="eyebrow">
-          <Editable eid="hiw.eyebrow" fallback="How It Works" />
-        </span>
-        <h2 className="h-display mt-3 text-3xl sm:text-4xl">
-          <Editable eid="hiw.title" fallback="From photo to forever in 4 steps" />
-        </h2>
-      </div>
+    <section className="bg-paper py-16 sm:py-20">
+      <div className="container-page">
+        <div className="mb-12 text-center">
+          <span className="eyebrow">
+            <Editable eid="hiw.eyebrow" fallback="How It Works" />
+          </span>
+          <h2 className="h-display mt-3 text-3xl sm:text-4xl">
+            <Editable eid="hiw.title" fallback="From photo to forever in 4 steps" />
+          </h2>
+        </div>
 
-      <div className="mx-auto mb-12 grid max-w-3xl grid-cols-3 items-center gap-3 text-center text-[12px] font-medium uppercase tracking-wider text-muted">
-        <div className="rounded-xl2 border border-line bg-paper py-6">
-          <Editable eid="hiw.flow1" fallback="Pet Photo" />
-        </div>
-        <div className="text-warm-dark">→</div>
-        <div className="rounded-xl2 border border-line bg-paper py-6">
-          <Editable eid="hiw.flow2" fallback="Digital Embroidery" />
-        </div>
-        <div className="text-warm-dark">→</div>
-        <div className="rounded-xl2 border border-line bg-paper py-6">
-          <Editable eid="hiw.flow3" fallback="Your Apparel" />
-        </div>
-      </div>
+        {/* 2×2 image+text grid — alternating layout like reference */}
+        <div className="grid gap-6 sm:gap-8 lg:gap-10 lg:grid-cols-2">
+          {steps.map((s) => (
+            <div
+              key={s.step}
+              className={`group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition-shadow hover:shadow-md ${
+                s.imgLeft ? "sm:flex-row" : "sm:flex-row-reverse"
+              }`}
+            >
+              {/* Image */}
+              <div className="relative aspect-square w-full shrink-0 sm:w-1/2">
+                <Image
+                  src={s.img}
+                  alt={s.imgAlt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
 
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {howItWorks.map((s, i) => (
-          <div key={s.step} className="text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-ink text-cream">
-              <StepIcon name={s.icon} />
+              {/* Text */}
+              <div className="flex flex-col justify-center p-6 sm:p-8 sm:w-1/2">
+                <span className="mb-1 text-xs font-semibold uppercase tracking-wider text-warm-dark">
+                  {s.step}
+                </span>
+                <h3 className="font-display text-xl font-bold text-ink sm:text-2xl">
+                  <Editable eid={`hiw.${s.step}.title`} fallback={s.title} />
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+                  <Editable eid={`hiw.${s.step}.text`} fallback={s.text} />
+                </p>
+              </div>
             </div>
-            <div className="mb-1 text-xs font-semibold text-warm-dark">STEP {s.step}</div>
-            <h3 className="font-display text-lg font-semibold text-ink">
-              <Editable eid={`hiw.${i}.title`} fallback={s.title} />
-            </h3>
-            <p className="mt-2 text-sm text-muted">
-              <Editable eid={`hiw.${i}.text`} fallback={s.text} />
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

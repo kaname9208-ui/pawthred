@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 
 export function Hero() {
@@ -31,15 +31,34 @@ export function Hero() {
         </p>
       </div>
 
+      {/* Real images replacing empty ImageSlot placeholders */}
       <div className="grid grid-cols-2 gap-4">
         <figure className="space-y-2">
-          <ImageSlot eid="hero.pet" ratio="4/5" tint="#E9E2D6" fallbackLabel="Your Pet Photo" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-xl2">
+            <Image
+              src="/hero/hero-pet.png"
+              alt="Your beloved pet photo — before embroidery"
+              fill
+              sizes="(max-width: 640px) 50vw, 25vw"
+              className="object-cover"
+              priority
+            />
+          </div>
           <figcaption className="text-center text-[12px] font-medium uppercase tracking-wider text-muted">
             Before · Their Photo
           </figcaption>
         </figure>
         <figure className="space-y-2">
-          <ImageSlot eid="hero.apparel" ratio="4/5" tint="#D9CDBC" fallbackLabel="Embroidered & Worn" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-xl2">
+            <Image
+              src="/hero/hero-apparel.png"
+              alt="Custom embroidered apparel — after, worn with love"
+              fill
+              sizes="(max-width: 640px) 50vw, 25vw"
+              className="object-cover"
+              priority
+            />
+          </div>
           <figcaption className="text-center text-[12px] font-medium uppercase tracking-wider text-warm-dark">
             After · Your Apparel
           </figcaption>
