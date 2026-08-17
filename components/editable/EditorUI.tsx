@@ -3,17 +3,93 @@
 import { useEffect, useState } from "react";
 import { useEdit } from "@/components/editable/EditProvider";
 
-// 浮动编辑入口 + 底部编辑抽屉。文字字段在此编辑；图片字段直接在图上点选上传。
+// 浮动编辑入口 + 登录框 + 底部编辑抽屉。
+// 文字字段在此编辑；图片字段直接在图上点选上传（已接云端）。
 export function EditorUI() {
-  const { editing, toggle, reset, exportJson, hasEdits, getText, setText, active, setActive } = useEdit();
+  const {
+    editing,
+    authed,
+    showLogin,
+    setShowLogin,
+    toggle,
+    login,
+    logout,
+    reset,
+    exportJson,
+    hasEdits,
+    getText,
+    setText,
+    publish,
+    active,
+    setActive,
+  } = useEdit();
+
   const [draft, setDraft] = useState("");
+  const [pw, setPw] = useState("");
+  const [pwError, setPwError] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (active?.type === "text") {
-      // 取当前值作为草稿（fallback 通过 Editable 已写入 override 或默认值，这里从 DOM 重新读取麻烦，改用存储）
       setDraft(getText(active.eid, ""));
     }
   }, [active, getText]);
+
+  async function handleLogin() {
+    setBusy(true);
+    setPwError(false);
+    const ok = await login(pw);
+    setBusy(false);
+    if (ok) {
+      setPw("");
+    } else {
+      setPwError(true);
+    }
+  }
+
+  async function handleDone() {
+    setBusy(true);
+    await publish();
+    setBusy(false);
+    setActive(null);
+  }
+
+  // 未登录 → 显示登录框
+  if (showLogin) {
+    return (
+      <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-line bg-paper px-4 py-4 shadow-[0_-6px_24px_rgba(0,0,0,0.08)]">
+        <div className="mx-auto flex max-w-md items-center gap-2">
+          <input
+            type="password"
+            autoFocus
+            value={pw}
+            onChange={(e) => {
+              setPw(e.target.value);
+              setPwError(false);
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            placeholder="Admin password"
+            className="flex-1 rounded-xl2 border border-line bg-cream px-4 py-2.5 text-sm outline-none focus:border-ink/40"
+          />
+          <button
+            onClick={handleLogin}
+            disabled={busy || !pw}
+            className="rounded-full bg-ink px-5 py-2.5 text-[13px] font-medium text-white disabled:opacity-40"
+          >
+            {busy ? "…" : "Login"}
+          </button>
+          <button onClick={() => setShowLogin(false)} className="px-3 text-[13px] text-muted">
+            Cancel
+          </button>
+        </div>
+        {pwError && (
+          <p className="mx-auto mt-1 max-w-md text-center text-[12px] text-red-600">
+            Wrong password.
+          </p>
+        )}
+      </div>
+    );
+  }
 
   if (!editing) {
     return (
@@ -29,8 +105,8 @@ export function EditorUI() {
   return (
     <>
       {/* 顶部提示条 */}
-      <div className="fixed left-0 right-0 top-0 z-[60] bg-warm text-center text-[13px] font-medium text-white py-1.5">
-        Edit mode on — click any text or image to change it
+      <div className="fixed left-0 right-0 top-0 z-[60] bg-warm py-1.5 text-center text-[13px] font-medium text-white">
+        Edit mode on — click any text or image to change it (saved to the live site)
       </div>
 
       {/* 右下角控制 */}
@@ -38,22 +114,31 @@ export function EditorUI() {
         <button
           onClick={exportJson}
           disabled={!hasEdits}
-          className="rounded-full bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow border border-line disabled:opacity-40"
+          className="rounded-full border border-line bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow disabled:opacity-40"
         >
           ⬇ Export JSON
         </button>
         <button
           onClick={reset}
-          className="rounded-full bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow border border-line"
+          className="rounded-full border border-line bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow"
         >
           ↺ Reset
         </button>
         <button
-          onClick={toggle}
-          className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-cream shadow-lg"
+          onClick={handleDone}
+          disabled={busy}
+          className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-cream shadow-lg disabled:opacity-50"
         >
-          ✓ Done
+          ✓ Publish &amp; Done
         </button>
+        {authed && (
+          <button
+            onClick={logout}
+            className="text-[12px] text-muted underline-offset-2 hover:text-ink hover:underline"
+          >
+            Log out
+          </button>
+        )}
       </div>
 
       {/* 底部编辑抽屉（文字） */}
@@ -102,8 +187,8 @@ export function EditorUI() {
       {/* 图片字段提示 */}
       {active?.type === "image" && (
         <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-line bg-paper px-4 py-4 text-center text-[13px] text-muted shadow-[0_-6px_24px_rgba(0,0,0,0.08)]">
-          Click the image slot on the page (it now shows “Click to add your image”) to upload your photo, then use Remove to revert.
-          <button onClick={() => setActive(null)} className="ml-3 text-ink font-medium">
+          Click the image slot on the page (it now shows “Click to add your image”) to upload your photo — it saves to the live site for everyone.
+          <button onClick={() => setActive(null)} className="ml-3 font-medium text-ink">
             Close
           </button>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useEdit } from "@/components/editable/EditProvider";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { cn } from "@/lib/format";
@@ -14,33 +14,8 @@ interface Props {
   rounded?: boolean;
 }
 
-// 把上传图片压缩到合适尺寸并转为 dataURL（避免 localStorage 超额）
-function fileToDataUrl(file: File, max = 1000): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const scale = Math.min(1, max / Math.max(img.width, img.height));
-        const w = Math.round(img.width * scale);
-        const h = Math.round(img.height * scale);
-        const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return reject(new Error("no canvas"));
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", 0.82));
-      };
-      img.onerror = reject;
-      img.src = reader.result as string;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-// 可编辑图片位：编辑模式下点击即可上传/替换你自己的图；非编辑态正常展示。
+// 可编辑图片位：编辑模式下点击即可上传/替换你自己的图；
+// 上传会发到服务端（Vercel Blob 公开存储），对所有访客生效，不再只存本地。
 export function ImageSlot({
   eid,
   ratio = "4/5",
@@ -49,14 +24,21 @@ export function ImageSlot({
   className,
   rounded = true,
 }: Props) {
-  const { editing, getImage, setImage, removeImage, setActive } = useEdit();
+  const { editing, getImage, setImage, removeImage, setActive, uploadImage } = useEdit();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
   const src = getImage(eid);
 
   async function onFile(file?: File) {
     if (!file) return;
-    const url = await fileToDataUrl(file);
-    setImage(eid, url);
+    setBusy(true);
+    try {
+      const url = await uploadImage(file);
+      if (url) setImage(eid, url);
+      else alert("Upload failed. Make sure you are logged in as admin and BLOB storage is configured.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   const [rw, rh] = ratio.split("/").map(Number);
@@ -107,7 +89,7 @@ export function ImageSlot({
 
       {editing && (
         <span className="pointer-events-none absolute left-2 top-2 rounded-full bg-ink/80 px-2 py-0.5 text-[10.5px] font-medium text-cream">
-          {src ? "Click to replace" : "Click to add your image"}
+          {busy ? "Uploading…" : src ? "Click to replace" : "Click to add your image"}
         </span>
       )}
 
