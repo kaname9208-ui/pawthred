@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { Editable } from "@/components/editable/Editable";
+import { PetPhotoUpload } from "@/components/PetPhotoUpload";
 
 export default function CheckoutSuccess() {
   const { clear } = useCart();
@@ -33,6 +34,7 @@ export default function CheckoutSuccess() {
         {sessionId && (
           <p className="mt-2 text-[13px] text-muted">Order ref: {sessionId.slice(0, 12)}…</p>
         )}
+        <PetPhotoUpload sessionId={sessionId} />
         <Link href="/products" className="btn-primary mt-7">
           <Editable eid="checkout.success.cta" fallback="Continue Shopping" />
         </Link>
