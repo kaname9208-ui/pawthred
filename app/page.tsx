@@ -5,14 +5,13 @@ import { ValueProps } from "@/components/ValueProps";
 import { HowItWorks } from "@/components/HowItWorks";
 import { ProductGrid } from "@/components/ProductGrid";
 import { TrustBadges } from "@/components/TrustBadges";
-import { ReviewWall } from "@/components/ReviewWall";
 import { UGCWall } from "@/components/UGCWall";
 import { GiftStory } from "@/components/GiftStory";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 import { products } from "@/lib/data/products";
-import { reviews, faqs } from "@/lib/data/content";
+import { faqs } from "@/lib/data/content";
 
 export const metadata: Metadata = {
   title: "Custom Pet Embroidered Apparel — Turn Your Pet Into Something You Can Wear",
@@ -69,19 +68,6 @@ export default function HomePage() {
       </section>
 
       <TrustBadges />
-
-      {/* Reviews */}
-      <section className="container-page section">
-        <div className="mb-10 text-center">
-          <span className="eyebrow">
-            <Editable eid="home.reviews.eyebrow" fallback="Loved By Pet People" />
-          </span>
-          <h2 className="h-display mt-3 text-3xl sm:text-4xl">
-            <Editable eid="home.reviews.title" fallback="What they say" />
-          </h2>
-        </div>
-        <ReviewWall reviews={reviews.slice(0, 3)} />
-      </section>
 
       <GiftStory />
 

@@ -3,6 +3,7 @@ import type { Product } from "@/lib/types";
 import {
   colorOption,
   sizeOption,
+  socksSizeOption,
   placementOption,
   petNameOption,
 } from "@/lib/data/options";
@@ -92,7 +93,7 @@ export const SEED_PRODUCTS: Product[] = [
         { value: "sage", label: "Sage", swatch: "#C7CDBF" },
         { value: "navy", label: "Navy", swatch: "#2C3A4B" },
       ]),
-      sizeOption,
+      socksSizeOption,
       placementOption,
       petNameOption,
     ],
