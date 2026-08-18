@@ -35,8 +35,9 @@ export function ProductCustomizer({
   const [added, setAdded] = useState(false);
 
   const price = useMemo(() => {
-    return product.priceFrom + (petCount - 1) * product.perExtraPet;
-  }, [product, petCount]);
+    const fleece = selections.fleece === "yes" ? 5 : 0;
+    return product.priceFrom + fleece + (petCount - 1) * product.perExtraPet;
+  }, [product, petCount, selections.fleece]);
 
   function setOpt(id: string, value: string) {
     setSelections((s) => ({ ...s, [id]: value }));

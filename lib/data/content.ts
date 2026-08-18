@@ -11,11 +11,11 @@ export const categorySections = [
     href: "/products?cat=t-shirts",
   },
   {
-    slug: "crewnecks",
-    title: "Crewnecks",
+    slug: "hoodies",
+    title: "Hoodies",
     blurb: "Classic comfort, quietly personal.",
     tint: "#E9D9C2",
-    href: "/products?cat=crewnecks",
+    href: "/products?cat=hoodies",
   },
   {
     slug: "socks",

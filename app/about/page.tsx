@@ -33,7 +33,7 @@ export default function AboutPage() {
           <p>
             <Editable
               eid="about.p2"
-              fallback="We started Paw & Thread to turn that memory into something you can wear. A pet photo, translated into careful embroidery and stitched onto a tee, crewneck or pair of socks you'll actually live in. Not a printed gag gift — a quiet, lasting keepsake."
+              fallback="We started Paw & Thread to turn that memory into something you can wear. A pet photo, translated into careful embroidery and stitched onto a tee, hoodie or pair of socks you'll actually live in. Not a printed gag gift — a quiet, lasting keepsake."
             />
           </p>
           <p>

@@ -1,6 +1,6 @@
 export type Category =
   | "t-shirts"
-  | "crewnecks"
+  | "hoodies"
   | "socks";
 
 export interface Choice {

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "custom pet embroidery",
     "custom pet t-shirt",
     "custom pet tshirt",
-    "custom pet crewneck",
+    "custom pet hoodie",
     "custom pet socks",
     "pet portrait embroidery",
     "personalized pet clothing",

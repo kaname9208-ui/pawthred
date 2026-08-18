@@ -8,7 +8,7 @@ const columns = [
     title: "Shop",
     links: [
       { label: "T-Shirts", href: "/products?cat=t-shirts" },
-      { label: "Crewnecks", href: "/products?cat=crewnecks" },
+      { label: "Hoodies", href: "/products?cat=hoodies" },
       { label: "Socks", href: "/products?cat=socks" },
       { label: "Best Sellers", href: "/products" },
     ],

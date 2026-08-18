@@ -6,6 +6,7 @@ import {
   socksSizeOption,
   placementOption,
   petNameOption,
+  fleeceOption,
 } from "@/lib/data/options";
 
 // 商品数据现在由「后台 admin」管理，存到 Vercel Blob 的 catalog/products.json（public）。
@@ -45,8 +46,8 @@ export const SEED_PRODUCTS: Product[] = [
   {
     slug: "custom-pet-crewneck",
     name: "Custom Pet Embroidered Crewneck",
-    category: "crewnecks",
-    categoryLabel: "Crewnecks",
+    category: "hoodies",
+    categoryLabel: "Hoodies",
     priceFrom: 69.99,
     priceOriginal: 79.99,
     reviews: 906,
@@ -55,7 +56,7 @@ export const SEED_PRODUCTS: Product[] = [
     tint: "#E9D9C2",
     blurb: "Classic comfort, quietly personal.",
     description:
-      "A timeless crewneck sweater with your pet's portrait stitched at the chest. Clean lines, premium cotton blend, and a fit that works for any season.",
+      "A timeless crewneck sweatshirt with your pet's portrait stitched at the chest. Clean lines, premium cotton blend, and a fit that works for any season.",
     perExtraPet: 12,
     options: [
       colorOption([
@@ -68,6 +69,36 @@ export const SEED_PRODUCTS: Product[] = [
       sizeOption,
       placementOption,
       petNameOption,
+      fleeceOption,
+    ],
+  },
+  {
+    slug: "custom-pet-hoodie",
+    name: "Custom Pet Embroidered Hoodie",
+    category: "hoodies",
+    categoryLabel: "Hoodies",
+    priceFrom: 69.99,
+    priceOriginal: 79.99,
+    reviews: 742,
+    rating: 4.9,
+    ratio: "4/5",
+    tint: "#E3D2BD",
+    blurb: "Cozy, and unmistakably yours.",
+    description:
+      "A soft pullover hoodie with your pet's portrait embroidered at the chest. Drawstring hood, roomy kangaroo pocket, and a fleece-optional interior built for lazy weekends and long walks.",
+    perExtraPet: 12,
+    options: [
+      colorOption([
+        { value: "cream", label: "Cream", swatch: "#F3ECE0" },
+        { value: "black", label: "Black", swatch: "#1A1A1A" },
+        { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
+        { value: "sage", label: "Sage", swatch: "#C7CDBF" },
+        { value: "navy", label: "Navy", swatch: "#2C3A4B" },
+      ]),
+      sizeOption,
+      placementOption,
+      petNameOption,
+      fleeceOption,
     ],
   },
   {
@@ -138,7 +169,26 @@ export const products = SEED_PRODUCTS;
 
 // ---- 对外异步接口（原同步函数名保留，改为 async） ----
 export async function getProducts(): Promise<Product[]> {
-  return (await readCatalog()) ?? SEED_PRODUCTS;
+  const catalog = (await readCatalog()) ?? SEED_PRODUCTS;
+  // 种子数据定义「商品集合与结构」（含新增商品/新增选项如加绒），
+  // Blob 目录仅用来覆盖用户通过 /admin/colors 改过的颜色色板。
+  // 这样即使后台曾写入旧目录，新增的圆领衫/连帽衫与加绒选项也一定会出现，
+  // 同时保留商家已编辑的颜色。
+  return SEED_PRODUCTS.map((seed) => {
+    const cat = catalog.find((c) => c.slug === seed.slug);
+    if (!cat) return seed;
+    const seedColor = seed.options.find((o) => o.id === "color");
+    const catColor = cat.options?.find((o) => o.id === "color");
+    if (seedColor && catColor?.choices?.length) {
+      return {
+        ...seed,
+        options: seed.options.map((o) =>
+          o.id === "color" ? { ...o, choices: catColor.choices } : o
+        ),
+      };
+    }
+    return seed;
+  });
 }
 
 export async function getProduct(slug: string): Promise<Product | undefined> {

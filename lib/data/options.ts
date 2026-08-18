@@ -45,3 +45,15 @@ export const petNameOption: CustomizeOption = {
   type: "text",
   placeholder: "e.g. MAX",
 };
+
+// 加绒选项：选 Yes 在结算价基础上 +$5（由 ProductCustomizer 计价）
+export const fleeceOption: CustomizeOption = {
+  id: "fleece",
+  label: "Fleece Lining",
+  type: "select",
+  required: true,
+  choices: [
+    { value: "no", label: "No" },
+    { value: "yes", label: "Yes (+$5)" },
+  ],
+};

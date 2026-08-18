@@ -2,7 +2,7 @@ import { siteConfig } from "@/lib/config/site.config";
 import type { CartItem } from "@/lib/types";
 
 // 衣服类目（参与「买 N 件减」活动）；袜子不参与
-export const CLOTHING_CATEGORIES: string[] = ["t-shirts", "crewnecks"];
+export const CLOTHING_CATEGORIES: string[] = ["t-shirts", "hoodies"];
 
 export function isClothing(category?: string): boolean {
   return !!category && CLOTHING_CATEGORIES.includes(category);
