@@ -33,6 +33,13 @@ export default function CheckoutPage() {
     e.preventDefault();
     setError(null);
     setBusy(true);
+    if (email) {
+      try {
+        localStorage.setItem("paw-thread-email", email);
+      } catch {
+        /* ignore */
+      }
+    }
     const payload = items.map((it) => ({
       slug: it.slug,
       name: it.name,
@@ -40,6 +47,7 @@ export default function CheckoutPage() {
       qty: it.qty,
       options: it.options,
       category: it.category,
+      photoUrl: it.photoUrl,
     }));
     const { url, error: err } = await createCheckout(payload, email || undefined);
     setBusy(false);

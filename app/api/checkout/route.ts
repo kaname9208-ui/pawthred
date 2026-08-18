@@ -13,16 +13,18 @@ interface CheckoutItem {
   qty: number;
   options?: Record<string, string>;
   category?: string;
+  photoUrl?: string;
 }
 
 // 把定制选项拼成可读后缀：Color / Size / Placement / Name
-function variantLabel(options?: Record<string, string>): string {
-  if (!options) return "";
+function variantLabel(options?: Record<string, string>, photoUrl?: string): string {
+  if (!options && !photoUrl) return "";
   const order = ["color", "size", "placement", "petName"];
-  const parts = Object.keys(options)
+  const parts = Object.keys(options || {})
     .sort((a, b) => order.indexOf(a) - order.indexOf(b))
-    .filter((k) => options[k])
-    .map((k) => options[k]);
+    .filter((k) => options?.[k])
+    .map((k) => options?.[k]);
+  if (photoUrl) parts.push("photo attached");
   return parts.length ? ` — ${parts.join(" / ")}` : "";
 }
 
@@ -58,7 +60,7 @@ export async function POST(req: NextRequest) {
         currency: "usd",
         unit_amount: Math.round(Number(it.price) * 100),
         product_data: {
-          name: `${it.name}${variantLabel(it.options)}`,
+          name: `${it.name}${variantLabel(it.options, it.photoUrl)}`,
         },
       },
     }));

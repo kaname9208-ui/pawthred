@@ -4,31 +4,64 @@ import { useRef, useState } from "react";
 import { Editable } from "@/components/editable/Editable";
 
 interface Props {
-  onPhotoChange: (info: { name: string; previewUrl: string } | null) => void;
+  onPhotoChange: (info: { name: string; previewUrl: string; photoUrl?: string } | null) => void;
 }
 
-// 纯前端上传：仅生成本地预览 URL，不传输到任何服务器（无后端/无 API Key 时使用）。
+// 真正上传：选图后立刻本地预览，同时把文件 POST 到 /api/upload（服务端用 BLOB_READ_WRITE_TOKEN
+// 存到 Vercel Blob），拿到永久可访问的 photoUrl。这样卖家端才能收到顾客的照片。
 export function PhotoUploader({ onPhotoChange }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleFile(file?: File) {
+  async function uploadToServer(file: File): Promise<string | undefined> {
+    const form = new FormData();
+    form.append("file", file);
+    // 定制阶段还没有 Stripe 订单号，用一个随机 id 作为本次上传的归属
+    form.append("sessionId", `draft-${Math.random().toString(36).slice(2, 10)}`);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok || !data?.url) {
+        throw new Error(data?.error || "Upload failed.");
+      }
+      return data.url as string;
+    } catch {
+      return undefined; // 上传失败不阻断下单，但提示
+    }
+  }
+
+  async function handleFile(file?: File) {
     if (!file) return;
-    const okTypes = ["image/jpeg", "image/png", "image/webp"];
+    const okTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     if (!okTypes.includes(file.type)) {
       setError("Please upload a JPG, PNG, or WEBP image.");
       return;
     }
     setError(null);
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    onPhotoChange({ name: file.name, previewUrl: url });
+    const localUrl = URL.createObjectURL(file);
+    setPreview(localUrl);
+    setPhotoUrl(undefined);
+    // 立即把本地预览交出去，用户体验不卡
+    onPhotoChange({ name: file.name, previewUrl: localUrl });
+    setUploading(true);
+    const url = await uploadToServer(file);
+    setUploading(false);
+    if (url) {
+      setPhotoUrl(url);
+      // 用服务器真实 URL 覆盖，确保下单时带的是可访问链接
+      onPhotoChange({ name: file.name, previewUrl: localUrl, photoUrl: url });
+    } else {
+      setError("Photo upload failed. You can still check out, but we may need you to resend it.");
+    }
   }
 
   function clear() {
     if (preview) URL.revokeObjectURL(preview);
     setPreview(null);
+    setPhotoUrl(undefined);
     if (inputRef.current) inputRef.current.value = "";
     onPhotoChange(null);
   }
@@ -38,7 +71,7 @@ export function PhotoUploader({ onPhotoChange }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         className="hidden"
         onChange={(e) => handleFile(e.target.files?.[0])}
       />
@@ -78,10 +111,13 @@ export function PhotoUploader({ onPhotoChange }: Props) {
               <Editable eid="upload.uploaded" fallback="Photo uploaded" />
             </div>
             <div className="text-[12.5px] text-muted">
-              <Editable
-                eid="upload.uploadedNote"
-                fallback="Looks good — we'll use this for your design."
-              />
+              {uploading ? (
+                <Editable eid="upload.uploading" fallback="Uploading to server…" />
+              ) : photoUrl ? (
+                <Editable eid="upload.uploadedNote" fallback="Saved — we'll use this for your design." />
+              ) : (
+                <Editable eid="upload.localNote" fallback="Saved on this device." />
+              )}
             </div>
           </div>
           <button

@@ -21,7 +21,7 @@ export function ProductCustomizer({
 }) {
   const { addItem } = useCart();
 
-  const [photo, setPhoto] = useState<{ name: string; previewUrl: string } | null>(null);
+  const [photo, setPhoto] = useState<{ name: string; previewUrl: string; photoUrl?: string } | null>(null);
   const [petCount, setPetCount] = useState(1);
   const [selections, setSelections] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
@@ -56,6 +56,7 @@ export function ProductCustomizer({
         ...(selectedColor ? { color: selectedColor } : {}),
       },
       photoName: photo.name,
+      photoUrl: photo.photoUrl,
       category: product.category,
     });
     setAdded(true);
