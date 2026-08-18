@@ -3,15 +3,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProduct, products } from "@/lib/data/products";
 import { reviews, faqs } from "@/lib/data/content";
-import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
-import { Stars } from "@/components/Stars";
-import { ProductCustomizer } from "@/components/ProductCustomizer";
+import { ProductDetail } from "@/components/ProductDetail";
 import { TrustBadges } from "@/components/TrustBadges";
 import { ReviewWall } from "@/components/ReviewWall";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { ProductGrid } from "@/components/ProductGrid";
-import { formatUSD } from "@/lib/format";
 import { siteConfig } from "@/lib/config/site.config";
 import { JsonLd } from "@/components/JsonLd";
 
@@ -36,8 +33,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     },
   };
 }
-
-const galleryLabels = ["Front view", "Close-up embroidery", "Model wearing", "Pet photo", "Embroidery comparison", "Lifestyle"];
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product = await getProduct(params.slug);
@@ -96,59 +91,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
         </span>
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-        {/* Gallery */}
-        <div>
-          <ImageSlot
-            eid={`product.${product.slug}.img`}
-            ratio="4/5"
-            tint={product.tint}
-            fallbackLabel="Front view"
-            className="mb-3"
-          />
-          <div className="grid grid-cols-3 gap-3">
-            {galleryLabels.slice(1).map((l, i) => (
-              <ImageSlot
-                key={l}
-                eid={`product.${product.slug}.gallery.${i + 1}`}
-                ratio="1/1"
-                tint={product.tint}
-                fallbackLabel={l}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Info + customizer */}
-        <div>
-          <h1 className="h-display text-3xl sm:text-4xl">
-            <Editable eid={`product.${product.slug}.name`} fallback={product.name} />
-          </h1>
-          <div className="mt-3 flex items-center gap-2 text-[14px] text-muted">
-            <Stars rating={product.rating} size={16} />
-            <span>
-              {product.rating.toFixed(1)} / 5 · {product.reviews.toLocaleString()} Reviews
-            </span>
-          </div>
-          <div className="mt-4 flex items-baseline gap-2">
-            <span className="font-display text-2xl font-semibold text-ink">
-              From {formatUSD(product.priceFrom)}
-            </span>
-            {product.priceOriginal && (
-              <span className="text-[15px] text-muted line-through">
-                {formatUSD(product.priceOriginal)}
-              </span>
-            )}
-          </div>
-          <p className="mt-5 text-[15px] leading-relaxed text-muted">
-            <Editable eid={`product.${product.slug}.description`} fallback={product.description} />
-          </p>
-
-          <div className="mt-8 border-t border-line pt-8">
-            <ProductCustomizer product={product} />
-          </div>
-        </div>
-      </div>
+      <ProductDetail product={product} />
 
       <TrustBadges />
 

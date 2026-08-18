@@ -9,7 +9,16 @@ import { StickyCartCTA } from "@/components/StickyCartCTA";
 import { Editable } from "@/components/editable/Editable";
 import { cn } from "@/lib/format";
 
-export function ProductCustomizer({ product }: { product: Product }) {
+export function ProductCustomizer({
+  product,
+  selectedColor = "",
+  onColorChange,
+}: {
+  product: Product;
+  /** 受控颜色（与图廊共享），不传则组件内部自理 */
+  selectedColor?: string;
+  onColorChange?: (v: string) => void;
+}) {
   const { addItem } = useCart();
 
   const [photo, setPhoto] = useState<{ name: string; previewUrl: string } | null>(null);
@@ -17,6 +26,8 @@ export function ProductCustomizer({ product }: { product: Product }) {
   const [selections, setSelections] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
     for (const opt of product.options) {
+      // 颜色由父级（ProductDetail）统一控制，这里不写入选初始值
+      if (opt.id === "color") continue;
       if (opt.type === "select" && opt.choices?.length) init[opt.id] = opt.choices[0].value;
     }
     return init;
@@ -38,7 +49,11 @@ export function ProductCustomizer({ product }: { product: Product }) {
       name: product.name,
       price,
       qty: 1,
-      options: { pets: String(petCount), ...selections },
+      options: {
+        pets: String(petCount),
+        ...selections,
+        ...(selectedColor ? { color: selectedColor } : {}),
+      },
       photoName: photo.name,
     });
     setAdded(true);
@@ -102,11 +117,11 @@ export function ProductCustomizer({ product }: { product: Product }) {
                 {opt.choices.map((c) => (
                   <button
                     key={c.value}
-                    onClick={() => setOpt(opt.id, c.value)}
+                    onClick={() => onColorChange?.(c.value)}
                     title={c.label}
                     className={cn(
                       "h-10 w-10 rounded-full border-2 transition-transform",
-                      selections[opt.id] === c.value ? "border-ink scale-110" : "border-line"
+                      selectedColor === c.value ? "border-ink scale-110" : "border-line"
                     )}
                     style={{ backgroundColor: c.swatch }}
                     aria-label={c.label}
