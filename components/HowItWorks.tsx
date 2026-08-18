@@ -1,37 +1,35 @@
-import Image from "next/image";
+"use client";
+
 import { Editable } from "@/components/editable/Editable";
+import { ImageSlot } from "@/components/editable/ImageSlot";
 
 const steps = [
   {
+    id: "step1",
     step: "第一步",
     title: "上传您的照片",
     text: "选择你最喜欢的宠物照片。清晰、光线充足的镜头效果最佳——我们几乎接受所有镜头。",
-    img: "/how-it-works/step1-upload-photo.png",
-    imgAlt: "Customer uploads their pet photo",
     imgLeft: false,
   },
   {
+    id: "step2",
     step: "第二步",
     title: "我们为您设计",
     text: "我们的艺术家会将您的照片改编成定制刺绣设计，与您的服装和颜色相匹配。",
-    img: "/how-it-works/step2-design.png",
-    imgAlt: "Digital embroidery design of pet portrait",
     imgLeft: true,
   },
   {
+    id: "step3",
     step: "第三步",
     title: "你批准了",
     text: "在生产前检查你的设计。变动很容易——我们希望它恰到好处。",
-    img: "/how-it-works/step3-approve.png",
-    imgAlt: "Close-up of embroidered pet patch",
     imgLeft: true,
   },
   {
+    id: "step4",
     step: "第四步",
     title: "穿上你的故事",
     text: "您的定制作品会被刺绣并寄送到家门口，准备成为日常生活的一部分。",
-    img: "/how-it-works/step4-wear.png",
-    imgAlt: "Person wearing apparel with embroidered pet",
     imgLeft: false,
   },
 ];
@@ -59,13 +57,12 @@ export function HowItWorks() {
               }`}
             >
               {/* Image */}
-              <div className="relative aspect-square w-full shrink-0 sm:w-1/2">
-                <Image
-                  src={s.img}
-                  alt={s.imgAlt}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  className="object-cover"
+              <div className="relative w-full shrink-0 sm:w-1/2">
+                <ImageSlot
+                  eid={`hiw.${s.id}.img`}
+                  ratio="1/1"
+                  tint="#F3ECE0"
+                  fallbackLabel={s.title}
                 />
               </div>
 
