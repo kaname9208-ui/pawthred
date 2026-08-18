@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 
-// 服务端用 BLOB_READ_WRITE_TOKEN 把顾客宠物照存进 Vercel Blob（private）。
-// token 只存在于服务器，绝不暴露给浏览器。
+// 服务端用 BLOB_READ_WRITE_TOKEN 把顾客宠物照存进 Vercel Blob。
+// 当前 @vercel/blob@0.27.0 仅支持 public access；照片路径包含随机时间戳和 sessionId，
+// 难以被猜测。token 只存在于服务器，绝不暴露给浏览器。
 export const runtime = "nodejs";
 
 const MAX_BYTES = 12 * 1024 * 1024; // 12MB
@@ -49,9 +50,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const blob = await put(pathname, file, {
-      access: "private",
+      access: "public",
       token,
-      metadata: email ? { email, sessionId } : { sessionId },
+      contentType: file.type,
+      cacheControlMaxAge: 365 * 24 * 60 * 60,
     });
     return NextResponse.json({ ok: true, url: blob.url, pathname: blob.pathname });
   } catch (err: any) {

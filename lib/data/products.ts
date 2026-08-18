@@ -128,7 +128,7 @@ export async function writeCatalogRaw(products: Product[]): Promise<void> {
     access: "public",
     token,
     contentType: "application/json",
-    allowOverwrite: true,
+    addRandomSuffix: false,
   });
 }
 

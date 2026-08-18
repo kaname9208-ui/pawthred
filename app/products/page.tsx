@@ -18,13 +18,13 @@ const cats = [
   ...categorySections.map((c) => ({ slug: c.slug, title: c.title })),
 ];
 
-export default function ProductsPage({
+export default async function ProductsPage({
   searchParams,
 }: {
   searchParams: { cat?: string };
 }) {
   const cat = searchParams?.cat;
-  const list = getByCategory(cat);
+  const list = await getByCategory(cat);
   const title = cat && cat !== "all" ? `${cat.charAt(0).toUpperCase() + cat.slice(1)}` : "All Products";
 
   return (

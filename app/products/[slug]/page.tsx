@@ -15,8 +15,8 @@ import { formatUSD } from "@/lib/format";
 import { siteConfig } from "@/lib/config/site.config";
 import { JsonLd } from "@/components/JsonLd";
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const p = getProduct(params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const p = await getProduct(params.slug);
   if (!p) return { title: "Product not found" };
   return {
     title: p.name,
@@ -39,8 +39,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
 const galleryLabels = ["Front view", "Close-up embroidery", "Model wearing", "Pet photo", "Embroidery comparison", "Lifestyle"];
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-  const product = getProduct(params.slug);
+export default async function ProductPage({ params }: { params: { slug: string } }) {
+  const product = await getProduct(params.slug);
   if (!product) notFound();
 
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 3);

@@ -7,7 +7,7 @@ import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 import { siteConfig } from "@/lib/config/site.config";
 import { formatUSD } from "@/lib/format";
-import { getProduct } from "@/lib/data/products";
+import { products } from "@/lib/data/products";
 
 export default function CartPage() {
   const { items, total, shipping, grandTotal, updateQty, removeItem } = useCart();
@@ -64,7 +64,7 @@ export default function CartPage() {
         <div className="space-y-4">
           {items.map((it) => {
             const key = itemKey(it);
-            const product = getProduct(it.slug);
+            const product = products.find((p) => p.slug === it.slug);
             const opts = Object.entries(it.options)
               .map(([k, v]) => `${k}: ${v}`)
               .join(" · ");
