@@ -94,7 +94,6 @@ export const SEED_PRODUCTS: Product[] = [
         { value: "navy", label: "Navy", swatch: "#2C3A4B" },
       ]),
       socksSizeOption,
-      placementOption,
       petNameOption,
     ],
   },

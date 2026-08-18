@@ -124,6 +124,14 @@ export function EditorUI() {
         >
           ↺ Reset
         </button>
+        <a
+          href="/admin/colors"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full border border-line bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow hover:border-ink/40"
+        >
+          🎨 Colors
+        </a>
         <button
           onClick={handleDone}
           disabled={busy}
