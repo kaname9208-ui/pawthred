@@ -55,6 +55,7 @@ export function ProductCustomizer({
         ...(selectedColor ? { color: selectedColor } : {}),
       },
       photoName: photo.name,
+      category: product.category,
     });
     setAdded(true);
   }

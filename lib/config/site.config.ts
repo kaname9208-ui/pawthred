@@ -8,7 +8,7 @@ export const siteConfig = {
   tagline: "Turn your pet into something you can wear.",
   description:
     "Paw & Thread turns your favorite pet photo into a custom embroidered tee, crewneck or socks. Premium stitching, made to order, shipped from the USA.",
-  announcement: "Free Shipping on Orders $100+",
+  announcement: "Buy 2+ apparel, save $5 each · Free shipping on orders $100+",
   freeShippingThreshold: 100,
   shippingFee: 6,
   currency: "USD",

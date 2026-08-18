@@ -8,7 +8,7 @@ import { formatUSD } from "@/lib/format";
 import { createCheckout } from "@/lib/api/client";
 
 export default function CheckoutPage() {
-  const { items, total, shipping, grandTotal, clear } = useCart();
+  const { items, total, discount, shipping, grandTotal, clear } = useCart();
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +39,7 @@ export default function CheckoutPage() {
       price: it.price,
       qty: it.qty,
       options: it.options,
+      category: it.category,
     }));
     const { url, error: err } = await createCheckout(payload, email || undefined);
     setBusy(false);
@@ -107,6 +108,14 @@ export default function CheckoutPage() {
                 <span>{formatUSD(it.price * it.qty)}</span>
               </div>
             ))}
+            {discount > 0 && (
+              <div className="flex justify-between text-green-700">
+                <span>
+                  <Editable eid="checkout.summaryDiscount" fallback="Apparel bundle" />
+                </span>
+                <span>−{formatUSD(discount)}</span>
+              </div>
+            )}
             <div className="flex justify-between border-t border-line pt-3 text-charcoal">
               <span>
                 <Editable eid="checkout.summaryShipping" fallback="Shipping" />

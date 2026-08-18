@@ -10,7 +10,7 @@ import { formatUSD } from "@/lib/format";
 import { products } from "@/lib/data/products";
 
 export default function CartPage() {
-  const { items, total, shipping, grandTotal, updateQty, removeItem } = useCart();
+  const { items, total, discount, shipping, grandTotal, updateQty, removeItem } = useCart();
 
   if (items.length === 0) {
     return (
@@ -131,6 +131,14 @@ export default function CartPage() {
               </span>
               <span>{formatUSD(total)}</span>
             </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-green-700">
+                <span>
+                  <Editable eid="cart.summary.discount" fallback="Apparel bundle" />
+                </span>
+                <span>−{formatUSD(discount)}</span>
+              </div>
+            )}
             <div className="flex justify-between">
               <span>
                 <Editable eid="cart.summary.shipping" fallback="Shipping" />

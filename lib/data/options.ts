@@ -21,15 +21,15 @@ export const sizeOption: CustomizeOption = {
   choices: SIZE_VALUES.map((v) => ({ value: v, label: v })),
 };
 
-// 袜子专用：仅两个尺码（小码 / 大码）
+// 袜子专用：仅两个尺码（Small / Large）
 export const socksSizeOption: CustomizeOption = {
   id: "size",
   label: "Size",
   type: "select",
   required: true,
   choices: [
-    { value: "small", label: "小码" },
-    { value: "large", label: "大码" },
+    { value: "small", label: "Small" },
+    { value: "large", label: "Large" },
   ],
 };
 export const placementOption: CustomizeOption = {

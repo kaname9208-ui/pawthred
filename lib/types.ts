@@ -66,4 +66,6 @@ export interface CartItem {
   qty: number;
   options: Record<string, string>;
   photoName?: string;
+  /** 商品类目（衣服/袜子），用于满减与包邮计算 */
+  category?: Category;
 }

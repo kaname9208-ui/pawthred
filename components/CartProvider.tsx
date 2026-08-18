@@ -2,12 +2,13 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { CartItem } from "@/lib/types";
-import { siteConfig } from "@/lib/config/site.config";
+import { computeTotals } from "@/lib/pricing";
 
 interface CartContextValue {
   items: CartItem[];
   itemCount: number;
   total: number;
+  discount: number;
   shipping: number;
   grandTotal: number;
   addItem: (item: CartItem) => void;
@@ -76,29 +77,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems([]);
   }
 
-  const value = useMemo<CartContextValue>(
-    () => {
-      const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-      const shipping =
-        subtotal === 0
-          ? 0
-          : subtotal >= siteConfig.freeShippingThreshold
-            ? 0
-            : siteConfig.shippingFee;
-      return {
-        items,
-        itemCount: items.reduce((s, i) => s + i.qty, 0),
-        total: subtotal,
-        shipping,
-        grandTotal: subtotal + shipping,
-        addItem,
-        removeItem,
-        updateQty,
-        clear,
-      };
-    },
-    [items]
-  );
+  const value = useMemo<CartContextValue>(() => {
+    const { subtotal, discount, shipping, grandTotal } = computeTotals(items);
+    return {
+      items,
+      itemCount: items.reduce((s, i) => s + i.qty, 0),
+      total: subtotal,
+      discount,
+      shipping,
+      grandTotal,
+      addItem,
+      removeItem,
+      updateQty,
+      clear,
+    };
+  }, [items]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

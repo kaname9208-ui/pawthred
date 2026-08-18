@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/lib/config/site.config";
+import { bulkClothingDiscount } from "@/lib/pricing";
 
 // 真实收款：服务端用 STRIPE_SECRET_KEY 创建 Stripe Checkout Session，
 // 返回托管收银台 URL，前端直接跳转。无需在前端暴露 Secret Key。
@@ -11,6 +12,7 @@ interface CheckoutItem {
   price: number; // USD, e.g. 39.99
   qty: number;
   options?: Record<string, string>;
+  category?: string;
 }
 
 // 把定制选项拼成可读后缀：Color / Size / Placement / Name
@@ -78,12 +80,27 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // Stripe 客户端（coupon 与收银台都会用到）
+  const { default: Stripe } = await import("stripe");
+  const stripe = new Stripe(secret);
+
+  // 衣服满减活动：满 2 件起每件减 $5（袜子不参与），以一次性 coupon 体现到收银台
+  const discount = bulkClothingDiscount(items);
+  const couponId =
+    discount > 0
+      ? (
+          await stripe.coupons.create({
+            amount_off: Math.round(discount * 100),
+            currency: "usd",
+            duration: "once",
+            name: "Apparel bundle",
+          })
+        ).id
+      : undefined;
+
   if (line_items.length === 0) {
     return NextResponse.json({ error: "No valid items to charge." }, { status: 400 });
   }
-
-  const { default: Stripe } = await import("stripe");
-  const stripe = new Stripe(secret);
 
   const origin =
     req.headers.get("origin") ||
@@ -94,6 +111,7 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items,
+      ...(couponId ? { discounts: [{ coupon: couponId }] } : {}),
       customer_email: body.email || undefined,
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cart`,
