@@ -34,7 +34,7 @@ interface EditCtx {
   getImage: (eid: string) => string | null;
   setImage: (eid: string, url: string) => void;
   removeImage: (eid: string) => void;
-  uploadImage: (file: File) => Promise<string | null>;
+  uploadImage: (file: File) => Promise<string>;
   publish: () => Promise<boolean>;
   active: Active;
   setActive: (a: Active) => void;
@@ -99,21 +99,23 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // 上传图片到云端，返回公开 URL
-  const uploadImage = useCallback(async (file: File): Promise<string | null> => {
-    if (!authedRef.current) return null;
+  // 上传图片到云端，返回公开 URL；失败时抛出可读错误。
+  const uploadImage = useCallback(async (file: File): Promise<string> => {
+    if (!authedRef.current) throw new Error("Not logged in as admin.");
     const fd = new FormData();
     fd.append("file", file);
     try {
       const res = await fetch("/api/edits/upload", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) {
-        console.error("Upload failed:", data.error);
-        return null;
+        throw new Error(data.error || `Upload failed (${res.status})`);
       }
-      return (data.url as string) ?? null;
-    } catch {
-      return null;
+      const url = data.url as string | undefined;
+      if (!url) throw new Error("Server did not return an image URL.");
+      return url;
+    } catch (err: any) {
+      console.error("Upload failed:", err);
+      throw err;
     }
   }, []);
 

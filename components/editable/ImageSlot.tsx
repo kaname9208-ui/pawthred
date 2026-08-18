@@ -34,8 +34,9 @@ export function ImageSlot({
     setBusy(true);
     try {
       const url = await uploadImage(file);
-      if (url) setImage(eid, url);
-      else alert("Upload failed. Make sure you are logged in as admin and BLOB storage is configured.");
+      setImage(eid, url);
+    } catch (err: any) {
+      alert(`Upload failed: ${err?.message || "Unknown error"}`);
     } finally {
       setBusy(false);
     }
