@@ -28,8 +28,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   icons: {
-    icon: "/brand/pawthred-mark.png",
-    apple: "/brand/pawthred-mark.png",
+    icon: "/brand/pawthread-mark.png",
+    apple: "/brand/pawthread-mark.png",
   },
   openGraph: {
     title: `${siteConfig.brandName} — Turn your pet into something you can wear`,
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
     url: siteConfig.siteUrl,
     siteName: siteConfig.brandName,
     images: [
-      { url: "/brand/pawthred-wordmark.png", width: 2048, height: 768, alt: siteConfig.brandName },
+      { url: "/og.png", width: 1200, height: 630, alt: siteConfig.brandName },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.brandName} — Turn your pet into something you can wear`,
     description: siteConfig.description,
-    images: ["/brand/pawthred-wordmark.png"],
+    images: ["/og.png"],
   },
 };
 

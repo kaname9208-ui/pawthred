@@ -46,16 +46,13 @@ export function Footer() {
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/brand/pawthred-mark.png"
+              src="/brand/pawthread-mark.png"
               alt=""
               className="h-11 w-11 object-contain"
             />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/pawthred-wordmark.png"
-              alt={siteConfig.brandName}
-              className="h-9 w-auto object-contain"
-            />
+            <span className="font-display text-2xl font-semibold leading-none text-ink">
+              {siteConfig.brandName}
+            </span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-muted">
             <Editable eid="footer.tagline" fallback={siteConfig.tagline} />

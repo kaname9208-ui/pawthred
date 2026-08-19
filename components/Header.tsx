@@ -68,12 +68,9 @@ export function Header() {
         </button>
 
         <Link href="/" className="flex items-center" aria-label={siteConfig.brandName}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/brand/pawthred-wordmark.png"
-            alt={siteConfig.brandName}
-            className="h-10 w-auto object-contain"
-          />
+          <span className="font-display text-3xl font-semibold leading-none text-ink">
+            {siteConfig.brandName}
+          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-7 text-[13.5px] font-medium text-charcoal">
