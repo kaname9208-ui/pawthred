@@ -36,9 +36,8 @@ export const SEED_PRODUCTS: Product[] = [
     perExtraPet: 10,
     options: [
       colorOption([
-        { value: "white", label: "White", swatch: "#F4F2ED" },
-        { value: "butter-yellow", label: "Butter Yellow", swatch: "#F1E49C" },
         { value: "chocolate", label: "Chocolate", swatch: "#4A3328" },
+        { value: "white", label: "White", swatch: "#F4F2ED" },
         { value: "sky-blue", label: "Sky Blue", swatch: "#B8D7EA" },
         { value: "black", label: "Black", swatch: "#111111" },
       ]),

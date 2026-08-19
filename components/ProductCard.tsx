@@ -11,7 +11,7 @@ import { hoodieImages } from "@/lib/data/hoodieImages";
 export function ProductCard({ product }: { product: Product }) {
   const fallbackSrc =
     product.slug === "custom-pet-t-shirt"
-      ? tshirtImages.white
+      ? tshirtImages.chocolate
       : product.slug === "custom-pet-crewneck"
       ? crewneckImages.cream
       : product.slug === "custom-pet-hoodie"
