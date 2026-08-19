@@ -96,8 +96,8 @@ export const SEED_PRODUCTS: Product[] = [
     perExtraPet: 10,
     options: [
       colorOption([
-        { value: "khaki", label: "Khaki", swatch: "#E4D7C1" },
         { value: "forest-green", label: "Forest Green", swatch: "#2F4A3F" },
+        { value: "khaki", label: "Khaki", swatch: "#E4D7C1" },
         { value: "mocha", label: "Mocha", swatch: "#766352" },
         { value: "black", label: "Black", swatch: "#111111" },
       ]),

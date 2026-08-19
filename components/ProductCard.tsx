@@ -15,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
       : product.slug === "custom-pet-crewneck"
       ? crewneckImages.cream
       : product.slug === "custom-pet-hoodie"
-        ? hoodieImages.khaki
+        ? hoodieImages["forest-green"]
         : undefined;
 
   return (
