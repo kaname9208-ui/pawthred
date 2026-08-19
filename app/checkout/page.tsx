@@ -10,6 +10,7 @@ import { createCheckout } from "@/lib/api/client";
 export default function CheckoutPage() {
   const { items, total, discount, shipping, grandTotal, clear } = useCart();
   const [email, setEmail] = useState("");
+  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +50,11 @@ export default function CheckoutPage() {
       category: it.category,
       photoUrl: it.photoUrl,
     }));
-    const { url, error: err } = await createCheckout(payload, email || undefined);
+    const { url, error: err } = await createCheckout(
+      payload,
+      email || undefined,
+      note.trim() || undefined
+    );
     setBusy(false);
     if (err) {
       setError(err);
@@ -86,6 +91,23 @@ export default function CheckoutPage() {
                 eid="checkout.paymentNote"
                 fallback="You'll enter your shipping address and card securely on the next step, powered by Stripe."
               />
+            </p>
+          </div>
+
+          <div className="card p-6">
+            <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+              Order Notes
+            </h2>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              maxLength={800}
+              rows={5}
+              placeholder="Anything we should know? Example: please keep the portrait simple, include the pet's name, or use the photo only as a reference."
+              className="w-full resize-none rounded-xl2 border border-line bg-paper px-4 py-3 text-sm outline-none focus:border-ink/40"
+            />
+            <p className="mt-2 text-[12.5px] text-muted">
+              Optional. This will be saved with your order for the embroidery artist.
             </p>
           </div>
 

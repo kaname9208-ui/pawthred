@@ -33,13 +33,14 @@ export const api = {
 // 创建 Stripe Checkout Session（真实收款）。前端把购物车传过来，服务端用 key 创建会话并返回跳转 URL。
 export async function createCheckout(
   items: { slug: string; name: string; price: number; qty: number; options?: Record<string, string>; photoUrl?: string }[],
-  email?: string
+  email?: string,
+  note?: string
 ): Promise<{ url?: string; error?: string }> {
   try {
     const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, email }),
+      body: JSON.stringify({ items, email, note }),
     });
     const data = await res.json();
     if (!res.ok) return { error: data?.error || "Checkout failed." };

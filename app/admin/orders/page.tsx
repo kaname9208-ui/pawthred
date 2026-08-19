@@ -17,6 +17,7 @@ interface Order {
   sessionId?: string;
   paymentIntentId?: string;
   email?: string;
+  note?: string;
   customerName?: string;
   phone?: string;
   shippingAddress?: {
@@ -195,12 +196,23 @@ export default function AdminOrdersPage() {
                 </div>
               </div>
 
-              {(order.customerName || order.phone || address || order.id) && (
+              {(order.customerName || order.phone || address || order.note || order.id || order.sessionId) && (
                 <div className="border-b border-line bg-cream px-5 py-3 text-[13px] text-charcoal">
                   {order.id && <div>Order ID: {order.id}</div>}
+                  {order.sessionId && <div>Stripe session: {order.sessionId}</div>}
                   {order.customerName && <div>Name: {order.customerName}</div>}
                   {order.phone && <div>Phone: {order.phone}</div>}
-                  {address && <div>Ship to: {address}</div>}
+                  {address ? (
+                    <div className="font-medium text-ink">Ship to: {address}</div>
+                  ) : (
+                    <div className="text-muted">Ship to: not available yet</div>
+                  )}
+                  {order.note && (
+                    <div className="mt-2 rounded-lg bg-paper p-3">
+                      <span className="font-semibold text-ink">Customer note:</span>{" "}
+                      <span className="whitespace-pre-wrap">{order.note}</span>
+                    </div>
+                  )}
                 </div>
               )}
 

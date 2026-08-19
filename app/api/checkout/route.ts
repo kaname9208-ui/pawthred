@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { items?: CheckoutItem[]; email?: string };
+  let body: { items?: CheckoutItem[]; email?: string; note?: string };
   try {
     body = await req.json();
   } catch {
@@ -107,6 +107,7 @@ export async function POST(req: NextRequest) {
   const totals = computeTotals(items);
   const orderId = `ord_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const createdAt = new Date().toISOString();
+  const note = typeof body.note === "string" ? body.note.trim().slice(0, 800) : undefined;
 
   const origin =
     req.headers.get("origin") ||
@@ -117,6 +118,7 @@ export async function POST(req: NextRequest) {
     await upsertOrder({
       id: orderId,
       email: body.email,
+      note,
       items,
       subtotal: totals.subtotal,
       discount: totals.discount,
@@ -135,9 +137,9 @@ export async function POST(req: NextRequest) {
       cancel_url: `${origin}/cart`,
       shipping_address_collection: { allowed_countries: ["US"] },
       phone_number_collection: { enabled: true },
-      metadata: { source: "paw-thread-nextjs", orderId },
+      metadata: { source: "paw-thread-nextjs", orderId, note: note || "" },
       payment_intent_data: {
-        metadata: { source: "paw-thread-nextjs", orderId },
+        metadata: { source: "paw-thread-nextjs", orderId, note: note || "" },
       },
     });
 
@@ -145,6 +147,7 @@ export async function POST(req: NextRequest) {
       id: orderId,
       sessionId: session.id,
       email: body.email,
+      note,
       items,
       subtotal: totals.subtotal,
       discount: totals.discount,

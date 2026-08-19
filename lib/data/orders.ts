@@ -20,6 +20,7 @@ export interface Order {
   sessionId?: string;
   paymentIntentId?: string;
   email?: string;
+  note?: string;
   customerName?: string;
   phone?: string;
   shippingAddress?: {
