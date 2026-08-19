@@ -1,20 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Editable } from "@/components/editable/Editable";
 
 interface OrderItem {
-  slug: string;
-  name: string;
-  price: number;
-  qty: number;
-  options: Record<string, string>;
+  slug?: string;
+  name?: string;
+  price?: number;
+  qty?: number;
+  options?: Record<string, string>;
   photoUrl?: string;
   category?: string;
 }
 
 interface Order {
-  id: string;
+  id?: string;
   sessionId?: string;
   paymentIntentId?: string;
   email?: string;
@@ -28,14 +27,14 @@ interface Order {
     postalCode?: string;
     country?: string;
   };
-  items: OrderItem[];
-  subtotal: number;
-  discount: number;
-  shipping: number;
-  total: number;
-  createdAt: string;
+  items?: OrderItem[];
+  subtotal?: number;
+  discount?: number;
+  shipping?: number;
+  total?: number;
+  createdAt?: string;
   paidAt?: string;
-  status: "paid" | "pending";
+  status?: "paid" | "pending";
 }
 
 const OPT_LABELS: Record<string, string> = {
@@ -47,11 +46,12 @@ const OPT_LABELS: Record<string, string> = {
   fleece: "Fleece",
 };
 
-function formatUSD(n: number) {
-  return `$${Number(n).toFixed(2)}`;
+function formatUSD(n?: number) {
+  return `$${(Number(n) || 0).toFixed(2)}`;
 }
 
-function fmtDate(iso: string) {
+function fmtDate(iso?: string) {
+  if (!iso) return "";
   try {
     return new Date(iso).toLocaleString();
   } catch {
@@ -67,12 +67,17 @@ function formatAddress(order: Order) {
     .join(", ");
 }
 
+function safeItems(order: Order): OrderItem[] {
+  return Array.isArray(order.items) ? order.items : [];
+}
+
 export default function AdminOrdersPage() {
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [password, setPassword] = useState("");
   const [loginErr, setLoginErr] = useState<string | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadErr, setLoadErr] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/check")
@@ -86,10 +91,14 @@ export default function AdminOrdersPage() {
 
   async function load() {
     setLoading(true);
+    setLoadErr(null);
     try {
       const r = await fetch("/api/orders");
       const d = await r.json();
-      if (r.ok) setOrders(d.orders || []);
+      if (!r.ok) throw new Error(d.error || "Could not load orders.");
+      setOrders(Array.isArray(d.orders) ? d.orders : []);
+    } catch (err: any) {
+      setLoadErr(err?.message || "Could not load orders.");
     } finally {
       setLoading(false);
     }
@@ -113,7 +122,7 @@ export default function AdminOrdersPage() {
   }
 
   if (authed === null) {
-    return <div className="container-page section text-muted">Loading…</div>;
+    return <div className="container-page section text-muted">Loading...</div>;
   }
 
   if (!authed) {
@@ -134,7 +143,7 @@ export default function AdminOrdersPage() {
           </button>
         </form>
         <p className="mt-4 text-[12.5px] text-muted">
-          This is your seller portal — view orders and customer pet photos here.
+          View orders, customer details, and pet photos here.
         </p>
       </div>
     );
@@ -142,100 +151,123 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="container-page section">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between gap-4">
         <div>
           <h1 className="h-display text-3xl">Orders &amp; Customer Photos</h1>
           <p className="mt-1 text-[13px] text-muted">
-            {orders.length} order{orders.length === 1 ? "" : "s"} · photos are uploaded by customers
+            {orders.length} order{orders.length === 1 ? "" : "s"}
           </p>
         </div>
-        <button onClick={load} className="rounded-full border border-line bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow">
-          ↻ Refresh
+        <button
+          onClick={load}
+          className="rounded-full border border-line bg-paper px-4 py-2 text-[13px] font-medium text-ink shadow"
+        >
+          Refresh
         </button>
       </div>
 
-      {loading && <p className="text-muted">Loading…</p>}
+      {loading && <p className="text-muted">Loading...</p>}
+      {loadErr && <div className="mb-5 rounded-xl2 bg-red-50 p-4 text-[13px] text-red-700">{loadErr}</div>}
 
       {!loading && orders.length === 0 && (
         <div className="card p-10 text-center text-muted">
-          No orders yet. When a customer checks out, their order and pet photo will appear here.
+          No orders yet. New checkout attempts and paid orders will appear here.
         </div>
       )}
 
       <div className="space-y-5">
-        {orders.map((o) => (
-          <div key={o.id} className="card overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-paper px-5 py-3">
-              <div className="text-[13px]">
-                <span className="font-semibold text-ink">{o.email || "(no email)"}</span>
-                <span className="ml-2 text-muted">{fmtDate(o.createdAt)}</span>
-              </div>
-              <div className="text-[13px] text-muted">
-                {o.status === "paid" ? "✓ Paid" : "Pending"} ·{" "}
-                <span className="font-semibold text-ink">{formatUSD(o.total)}</span>
-              </div>
-            </div>
-
-            {(o.customerName || o.phone || formatAddress(o)) && (
-              <div className="border-b border-line bg-cream px-5 py-3 text-[13px] text-charcoal">
-                {o.customerName && <div>Name: {o.customerName}</div>}
-                {o.phone && <div>Phone: {o.phone}</div>}
-                {formatAddress(o) && <div>Ship to: {formatAddress(o)}</div>}
-              </div>
-            )}
-
-            <div className="divide-y divide-line">
-              {o.items.map((it, i) => (
-                <div key={i} className="flex gap-4 p-5">
-                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
-                    {it.photoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={it.photoUrl} alt="Customer pet photo" className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-[11px] text-muted">
-                        no photo
-                      </div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="font-display text-lg font-semibold text-ink">
-                      {it.name} × {it.qty}
-                    </div>
-                    <div className="mt-1 text-[13px] text-muted">
-                      {formatUSD(it.price * it.qty)}
-                    </div>
-                    {it.photoUrl && (
-                      <a
-                        href={it.photoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-1 inline-block text-[12.5px] font-medium text-warm-dark hover:underline"
-                      >
-                        Open full photo ↗
-                      </a>
-                    )}
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {Object.entries(it.options || {}).map(([k, v]) => (
-                        <span
-                          key={k}
-                          className="rounded-full bg-paper px-2.5 py-1 text-[11.5px] text-charcoal"
-                        >
-                          {OPT_LABELS[k] || k}: {v}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+        {orders.map((order, orderIndex) => {
+          const items = safeItems(order);
+          const address = formatAddress(order);
+          return (
+            <div key={order.id || orderIndex} className="card overflow-hidden">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-paper px-5 py-3">
+                <div className="text-[13px]">
+                  <span className="font-semibold text-ink">{order.email || "(no email)"}</span>
+                  <span className="ml-2 text-muted">{fmtDate(order.createdAt)}</span>
                 </div>
-              ))}
-            </div>
+                <div className="text-[13px] text-muted">
+                  <span className={order.status === "paid" ? "font-semibold text-green-700" : "font-semibold text-warm-dark"}>
+                    {order.status === "paid" ? "Paid" : "Pending"}
+                  </span>
+                  <span className="mx-2">-</span>
+                  <span className="font-semibold text-ink">{formatUSD(order.total)}</span>
+                </div>
+              </div>
 
-            <div className="flex justify-end gap-4 border-t border-line bg-paper px-5 py-3 text-[13px] text-muted">
-              <span>Subtotal {formatUSD(o.subtotal)}</span>
-              {o.discount > 0 && <span className="text-green-700">−{formatUSD(o.discount)}</span>}
-              <span>Shipping {o.shipping > 0 ? formatUSD(o.shipping) : "Free"}</span>
+              {(order.customerName || order.phone || address || order.id) && (
+                <div className="border-b border-line bg-cream px-5 py-3 text-[13px] text-charcoal">
+                  {order.id && <div>Order ID: {order.id}</div>}
+                  {order.customerName && <div>Name: {order.customerName}</div>}
+                  {order.phone && <div>Phone: {order.phone}</div>}
+                  {address && <div>Ship to: {address}</div>}
+                </div>
+              )}
+
+              <div className="divide-y divide-line">
+                {items.length === 0 && (
+                  <div className="p-5 text-[13px] text-muted">
+                    This order has no saved item details.
+                  </div>
+                )}
+                {items.map((item, itemIndex) => (
+                  <div key={itemIndex} className="flex gap-4 p-5">
+                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
+                      {item.photoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={item.photoUrl}
+                          alt="Customer pet photo"
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-[11px] text-muted">
+                          no photo
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-display text-lg font-semibold text-ink">
+                        {item.name || "Custom item"} x {item.qty || 1}
+                      </div>
+                      <div className="mt-1 text-[13px] text-muted">
+                        {formatUSD((Number(item.price) || 0) * (Number(item.qty) || 1))}
+                      </div>
+                      {item.photoUrl && (
+                        <a
+                          href={item.photoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-1 inline-block text-[12.5px] font-medium text-warm-dark hover:underline"
+                        >
+                          Open full photo
+                        </a>
+                      )}
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {Object.entries(item.options || {}).map(([k, v]) => (
+                          <span
+                            key={k}
+                            className="rounded-full bg-paper px-2.5 py-1 text-[11.5px] text-charcoal"
+                          >
+                            {OPT_LABELS[k] || k}: {v}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap justify-end gap-4 border-t border-line bg-paper px-5 py-3 text-[13px] text-muted">
+                <span>Subtotal {formatUSD(order.subtotal)}</span>
+                {(Number(order.discount) || 0) > 0 && (
+                  <span className="text-green-700">-{formatUSD(order.discount)}</span>
+                )}
+                <span>Shipping {(Number(order.shipping) || 0) > 0 ? formatUSD(order.shipping) : "Free"}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
