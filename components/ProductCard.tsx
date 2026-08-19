@@ -4,8 +4,12 @@ import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 import { Stars } from "@/components/Stars";
 import { formatUSD } from "@/lib/format";
+import { crewneckImages } from "@/lib/data/crewneckImages";
 
 export function ProductCard({ product }: { product: Product }) {
+  const fallbackSrc =
+    product.slug === "custom-pet-crewneck" ? crewneckImages.rose : undefined;
+
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       <div className="relative overflow-hidden rounded-xl2 border border-line bg-paper">
@@ -14,6 +18,7 @@ export function ProductCard({ product }: { product: Product }) {
           ratio={product.ratio}
           tint={product.tint}
           fallbackLabel={product.categoryLabel}
+          fallbackSrc={fallbackSrc}
         />
         <span className="absolute left-3 top-3 rounded-full bg-ink/85 px-2.5 py-1 text-[11px] font-medium text-cream">
           <Editable eid="product.flag" fallback="Best Seller" />
