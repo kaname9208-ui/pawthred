@@ -95,11 +95,10 @@ export const SEED_PRODUCTS: Product[] = [
     perExtraPet: 10,
     options: [
       colorOption([
-        { value: "cream", label: "Cream", swatch: "#F3ECE0" },
-        { value: "black", label: "Black", swatch: "#1A1A1A" },
-        { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
-        { value: "sage", label: "Sage", swatch: "#C7CDBF" },
-        { value: "navy", label: "Navy", swatch: "#2C3A4B" },
+        { value: "khaki", label: "Khaki", swatch: "#E4D7C1" },
+        { value: "forest-green", label: "Forest Green", swatch: "#2F4A3F" },
+        { value: "mocha", label: "Mocha", swatch: "#766352" },
+        { value: "black", label: "Black", swatch: "#111111" },
       ]),
       sizeOption,
       embroideryStyleOption,
@@ -184,7 +183,7 @@ export async function getProducts(): Promise<Product[]> {
   return SEED_PRODUCTS.map((seed) => {
     const cat = catalog.find((c) => c.slug === seed.slug);
     if (!cat) return seed;
-    if (seed.slug === "custom-pet-crewneck") return seed;
+    if (seed.slug === "custom-pet-crewneck" || seed.slug === "custom-pet-hoodie") return seed;
     const seedColor = seed.options.find((o) => o.id === "color");
     const catColor = cat.options?.find((o) => o.id === "color");
     if (seedColor && catColor?.choices?.length) {

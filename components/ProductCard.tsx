@@ -5,10 +5,15 @@ import { Editable } from "@/components/editable/Editable";
 import { Stars } from "@/components/Stars";
 import { formatUSD } from "@/lib/format";
 import { crewneckImages } from "@/lib/data/crewneckImages";
+import { hoodieImages } from "@/lib/data/hoodieImages";
 
 export function ProductCard({ product }: { product: Product }) {
   const fallbackSrc =
-    product.slug === "custom-pet-crewneck" ? crewneckImages.cream : undefined;
+    product.slug === "custom-pet-crewneck"
+      ? crewneckImages.cream
+      : product.slug === "custom-pet-hoodie"
+        ? hoodieImages.khaki
+        : undefined;
 
   return (
     <Link href={`/products/${product.slug}`} className="group block">

@@ -6,6 +6,7 @@ import { ImageSlot } from "@/components/editable/ImageSlot";
 import { useEdit } from "@/components/editable/EditProvider";
 import { cn } from "@/lib/format";
 import { crewneckImages } from "@/lib/data/crewneckImages";
+import { hoodieImages } from "@/lib/data/hoodieImages";
 
 const LABELS = ["Front view", "Close-up embroidery", "Model wearing", "Lifestyle shot", "Detail"];
 const PER_COLOR = 5;
@@ -22,6 +23,8 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
   const { editing } = useEdit();
   const [index, setIndex] = useState(0);
   const isCrewneck = slug === "custom-pet-crewneck" && !!colorChoices?.length;
+  const isHoodie = slug === "custom-pet-hoodie" && !!colorChoices?.length;
+  const linkedImages = isCrewneck ? crewneckImages : isHoodie ? hoodieImages : null;
 
   const selectedColorIndex = useMemo(() => {
     if (!colorChoices?.length) return 0;
@@ -29,20 +32,20 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
   }, [colorChoices, selectedColor]);
 
   useEffect(() => {
-    setIndex(isCrewneck ? selectedColorIndex : 0);
-  }, [isCrewneck, selectedColorIndex, selectedColor]);
+    setIndex(linkedImages ? selectedColorIndex : 0);
+  }, [linkedImages, selectedColorIndex, selectedColor]);
 
   const base = colorChoices?.length
     ? `product.${slug}.c.${selectedColor}`
     : `product.${slug}.g`;
 
   const slides = useMemo(() => {
-    if (isCrewneck && colorChoices?.length) {
+    if (linkedImages && colorChoices?.length) {
       return colorChoices.map((color) => ({
         color,
         eid: `product.${slug}.c.${color.value}.0`,
         label: color.label,
-        src: crewneckImages[color.value],
+        src: linkedImages[color.value],
       }));
     }
 
@@ -52,7 +55,7 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
       label: LABELS[i],
       src: undefined,
     }));
-  }, [base, colorChoices, isCrewneck, slug]);
+  }, [base, colorChoices, linkedImages, slug]);
 
   const activeSlide = slides[index] ?? slides[0];
   const activeColorLabel =
