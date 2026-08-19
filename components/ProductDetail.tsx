@@ -68,6 +68,7 @@ export function ProductDetail({ product }: { product: Product }) {
       </div>
       {product.slug === "custom-pet-t-shirt" && <TShirtSizeGuide />}
       {product.slug === "custom-pet-crewneck" && <CrewneckSizeGuide />}
+      {product.slug === "custom-pet-hoodie" && <CrewneckSizeGuide variant="hoodie" />}
     </>
   );
 }
