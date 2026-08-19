@@ -9,7 +9,6 @@ const columns = [
     links: [
       { label: "T-Shirts", href: "/products?cat=t-shirts" },
       { label: "Hoodies", href: "/products?cat=hoodies" },
-      { label: "Socks", href: "/products?cat=socks" },
       { label: "Best Sellers", href: "/products" },
     ],
   },

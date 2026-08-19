@@ -9,7 +9,7 @@ import { cn } from "@/lib/format";
 export const metadata: Metadata = {
   title: "Shop Custom Pet Embroidered Apparel",
   description:
-    "Browse custom pet embroidered t-shirts, hoodies and socks. Made to order from your pet's photo.",
+    "Browse custom pet embroidered t-shirts, crewnecks and hoodies. Made to order from your pet's photo.",
   alternates: { canonical: "/products" },
 };
 

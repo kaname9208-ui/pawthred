@@ -7,7 +7,7 @@ export const siteConfig = {
   brandName: process.env.NEXT_PUBLIC_SITE_NAME || "PawThread",
   tagline: "Turn your pet into something you can wear.",
   description:
-    "PawThread turns your favorite pet photo into a custom embroidered tee, hoodie or socks. Premium stitching, made to order, shipped from the USA.",
+    "PawThread turns your favorite pet photo into a custom embroidered tee, crewneck or hoodie. Premium stitching, made to order, shipped from the USA.",
   announcement: "Buy 2+ apparel, save $5 each · Free shipping on orders $100+",
   freeShippingThreshold: 100,
   shippingFee: 6,
@@ -18,7 +18,6 @@ export const siteConfig = {
     { label: "Shop", href: "/products" },
     { label: "T-Shirts", href: "/products?cat=t-shirts" },
     { label: "Hoodies", href: "/products?cat=hoodies" },
-    { label: "Socks", href: "/products?cat=socks" },
     { label: "How It Works", href: "/how-it-works" },
     { label: "Our Story", href: "/about" },
     { label: "FAQ", href: "/faq" },

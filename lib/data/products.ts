@@ -15,6 +15,7 @@ import {
 // 读取失败时回退到下面的 SEED_PRODUCTS，保证站点在后台尚未写入任何数据前也能正常显示。
 
 const CATALOG_PATH = "catalog/products.json";
+const HIDDEN_PRODUCT_SLUGS = new Set(["custom-pet-socks"]);
 
 // ---- 初始种子数据（与后台未写入前一致） ----
 export const SEED_PRODUCTS: Product[] = [
@@ -171,7 +172,7 @@ export async function writeCatalogRaw(products: Product[]): Promise<void> {
 
 // ---- 同步导出（供首页/组件直接使用，无需 await） ----
 // 后台写入 Blob 前使用种子数据；后台上线后建议改为异步读取。
-export const products = SEED_PRODUCTS;
+export const products = SEED_PRODUCTS.filter((p) => !HIDDEN_PRODUCT_SLUGS.has(p.slug));
 
 // ---- 对外异步接口（原同步函数名保留，改为 async） ----
 export async function getProducts(): Promise<Product[]> {
@@ -180,7 +181,7 @@ export async function getProducts(): Promise<Product[]> {
   // Blob 目录仅用来覆盖用户通过 /admin/colors 改过的颜色色板。
   // 这样即使后台曾写入旧目录，新增的圆领衫/连帽衫与加绒选项也一定会出现，
   // 同时保留商家已编辑的颜色。
-  return SEED_PRODUCTS.map((seed) => {
+  return SEED_PRODUCTS.filter((seed) => !HIDDEN_PRODUCT_SLUGS.has(seed.slug)).map((seed) => {
     const cat = catalog.find((c) => c.slug === seed.slug);
     if (!cat) return seed;
     if (seed.slug === "custom-pet-crewneck" || seed.slug === "custom-pet-hoodie") return seed;

@@ -4,9 +4,9 @@ import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 
 export const metadata: Metadata = {
-  title: "Our Story — Paw & Thread",
+  title: "Our Story — PawThread",
   description:
-    "Paw & Thread was born from a simple idea: your pet is more than a pet. We turn their memory into something you can wear every day.",
+    "PawThread was born from a simple idea: your pet is more than a pet. We turn their memory into something you can wear every day.",
   alternates: { canonical: "/about" },
 };
 
@@ -33,7 +33,7 @@ export default function AboutPage() {
           <p>
             <Editable
               eid="about.p2"
-              fallback="We started Paw & Thread to turn that memory into something you can wear. A pet photo, translated into careful embroidery and stitched onto a tee, hoodie or pair of socks you'll actually live in. Not a printed gag gift — a quiet, lasting keepsake."
+              fallback="We started PawThread to turn that memory into something you can wear. A pet photo, translated into careful embroidery and stitched onto a tee, crewneck or hoodie you'll actually live in. Not a printed gag gift — a quiet, lasting keepsake."
             />
           </p>
           <p>

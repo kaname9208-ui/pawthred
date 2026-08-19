@@ -17,13 +17,6 @@ export const categorySections = [
     tint: "#E9D9C2",
     href: "/products?cat=hoodies",
   },
-  {
-    slug: "socks",
-    title: "Socks",
-    blurb: "Every step, a little closer.",
-    tint: "#E8DCD0",
-    href: "/products?cat=socks",
-  },
 ];
 
 export const valueProps = [

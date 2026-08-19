@@ -16,7 +16,7 @@ import { faqs } from "@/lib/data/content";
 export const metadata: Metadata = {
   title: "Custom Pet Embroidered Apparel — Turn Your Pet Into Something You Can Wear",
   description:
-    "PawThread turns your favorite pet photo into a custom embroidered tee, hoodie or socks. Premium stitching, made to order, shipped from the USA.",
+    "PawThread turns your favorite pet photo into a custom embroidered tee, crewneck or hoodie. Premium stitching, made to order, shipped from the USA.",
   alternates: { canonical: "/" },
 };
 
