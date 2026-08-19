@@ -65,12 +65,13 @@ export const SEED_PRODUCTS: Product[] = [
     options: [
       colorOption([
         { value: "cream", label: "Cream", swatch: "#F0E3C6" },
+        { value: "white", label: "White", swatch: "#F2EEE6" },
         { value: "charcoal", label: "Charcoal", swatch: "#45423F" },
         { value: "heather-grey", label: "Heather Grey", swatch: "#C9C9C4" },
-        { value: "sage", label: "Sage", swatch: "#566B61" },
+        { value: "sky-blue", label: "Sky Blue", swatch: "#AFC4D5" },
         { value: "forest-green", label: "Forest Green", swatch: "#133D32" },
         { value: "burgundy", label: "Burgundy", swatch: "#6D1F2A" },
-        { value: "rose", label: "Rose", swatch: "#C25573" },
+        { value: "soft-pink", label: "Soft Pink", swatch: "#E7B7C7" },
       ]),
       sizeOption,
       embroideryStyleOption,
