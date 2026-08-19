@@ -9,6 +9,28 @@ import { StickyCartCTA } from "@/components/StickyCartCTA";
 import { Editable } from "@/components/editable/Editable";
 import { cn } from "@/lib/format";
 
+const embroideryStyleImages: Record<string, string> = {
+  "portrait-only": "/options/embroidery-style-portrait-only.jpg",
+  "portrait-name": "/options/embroidery-style-college.jpg",
+  "name-only": "/options/embroidery-style-name-under.jpg",
+};
+
+function EmbroideryStylePreview({ type, label }: { type: string; label: string }) {
+  return (
+    <span className="block">
+      <span className="relative mb-2 block aspect-square w-full overflow-hidden rounded-xl2 bg-white">
+        <img
+          src={embroideryStyleImages[type]}
+          alt=""
+          className="h-full w-full object-cover"
+          draggable={false}
+        />
+      </span>
+      <span className="block text-[12.5px] font-semibold text-ink">{label}</span>
+    </span>
+  );
+}
+
 function EmbroideryPreview({ type, label }: { type: string; label: string }) {
   const isPlacement = ["left-chest", "front-center", "back-center"].includes(type);
   const isBack = type === "back-center";
@@ -189,7 +211,26 @@ export function ProductCustomizer({
               </div>
             )}
 
-            {opt.type === "select" && ["embroideryStyle", "placement"].includes(opt.id) && opt.choices && (
+            {opt.type === "select" && opt.id === "embroideryStyle" && opt.choices && (
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                {opt.choices.map((c) => (
+                  <button
+                    key={c.value}
+                    onClick={() => setOpt(opt.id, c.value)}
+                    className={cn(
+                      "rounded-xl2 border bg-paper p-2 text-center transition-colors",
+                      selections[opt.id] === c.value
+                        ? "border-ink ring-2 ring-ink/10"
+                        : "border-line hover:border-ink/40"
+                    )}
+                  >
+                    <EmbroideryStylePreview type={c.value} label={c.label} />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {opt.type === "select" && opt.id === "placement" && opt.choices && (
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 {opt.choices.map((c) => (
                   <button
@@ -208,7 +249,7 @@ export function ProductCustomizer({
               </div>
             )}
 
-            {opt.type === "select" && opt.id !== "color" && !["embroideryStyle", "placement"].includes(opt.id) && opt.choices && (
+            {opt.type === "select" && opt.id !== "color" && opt.id !== "embroideryStyle" && opt.id !== "placement" && opt.choices && (
               <div className="flex flex-wrap gap-2">
                 {opt.choices.map((c) => (
                   <button
