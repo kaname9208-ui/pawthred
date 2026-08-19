@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { siteConfig } from "@/lib/config/site.config";
 
 export function EmailSubscribe({ compact = false }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
@@ -25,12 +24,12 @@ export function EmailSubscribe({ compact = false }: { compact?: boolean }) {
           className="flex-1 rounded-full border border-line bg-paper px-4 py-2.5 text-sm outline-none focus:border-ink/40"
         />
         <button type="submit" className="btn-primary shrink-0">
-          {siteConfig.emailOffer.replace("Subscribe for ", "Get ")}
+          Subscribe
         </button>
       </div>
       {done && (
         <p className="mt-2 text-[12.5px] text-warm-dark">
-          Thanks! Check your inbox for your 10% off code (demo).
+          Thanks! You are on the list.
         </p>
       )}
     </form>

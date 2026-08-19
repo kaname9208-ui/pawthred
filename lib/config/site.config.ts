@@ -27,7 +27,7 @@ export const siteConfig = {
     tiktok: "#",
     pinterest: "#",
   },
-  emailOffer: "Subscribe for 10% Off",
+  emailOffer: "Join the PawThread list",
   contactEmail: "hello@pawandthread.com",
 } as const;
 
