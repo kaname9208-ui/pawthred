@@ -21,12 +21,12 @@ const CartContext = createContext<CartContextValue | null>(null);
 const STORAGE_KEY = "paw-thread-cart";
 
 // 由 slug + 选项 + 是否有照片 生成稳定 key，便于合并相同定制项
-export function itemKey(item: Pick<CartItem, "slug" | "options" | "photoName">): string {
+export function itemKey(item: Pick<CartItem, "slug" | "options" | "photoName" | "photoNames">): string {
   const opts = Object.entries(item.options)
     .map(([k, v]) => `${k}:${v}`)
     .sort()
     .join("|");
-  const photo = item.photoName ? "photo" : "nophoto";
+  const photo = item.photoNames?.length ? item.photoNames.join(",") : item.photoName || "nophoto";
   return `${item.slug}#${photo}#${opts}`;
 }
 

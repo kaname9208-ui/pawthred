@@ -49,6 +49,8 @@ export default function CheckoutPage() {
       options: it.options,
       category: it.category,
       photoUrl: it.photoUrl,
+      photoUrls: it.photoUrls,
+      photoNames: it.photoNames,
     }));
     const { url, error: err } = await createCheckout(
       payload,

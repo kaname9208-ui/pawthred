@@ -68,6 +68,8 @@ export interface CartItem {
   photoName?: string;
   /** 顾客宠物照在 Vercel Blob 上的真实可访问 URL（下单后卖家端可见） */
   photoUrl?: string;
+  photoNames?: string[];
+  photoUrls?: string[];
   /** 商品类目（衣服/袜子），用于满减与包邮计算 */
   category?: Category;
 }

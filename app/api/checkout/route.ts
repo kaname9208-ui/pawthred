@@ -14,6 +14,8 @@ interface CheckoutItem {
   options?: Record<string, string>;
   category?: string;
   photoUrl?: string;
+  photoUrls?: string[];
+  photoNames?: string[];
 }
 
 function variantLabel(options?: Record<string, string>, photoUrl?: string): string {
@@ -36,7 +38,9 @@ function normalizeItems(items: CheckoutItem[]) {
       price: Number(it.price),
       qty: Math.max(1, Math.floor(Number(it.qty))),
       options: it.options || {},
-      photoUrl: it.photoUrl,
+      photoUrl: it.photoUrl || it.photoUrls?.[0],
+      photoUrls: Array.isArray(it.photoUrls) ? it.photoUrls.slice(0, 3) : it.photoUrl ? [it.photoUrl] : [],
+      photoNames: Array.isArray(it.photoNames) ? it.photoNames.slice(0, 3) : [],
       category: categories.includes(it.category as Category)
         ? (it.category as Category)
         : undefined,

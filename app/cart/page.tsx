@@ -64,24 +64,30 @@ export default function CartPage() {
           {items.map((it) => {
             const key = itemKey(it);
             const product = products.find((p) => p.slug === it.slug);
+            const photoUrls = it.photoUrls?.length ? it.photoUrls : it.photoUrl ? [it.photoUrl] : [];
             const opts = Object.entries(it.options)
               .map(([k, v]) => `${k}: ${v}`)
               .join(" · ");
             return (
               <div key={key} className="flex gap-4 rounded-xl2 border border-line bg-paper p-4">
-                <div
-                  className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-paper"
-                  style={{ backgroundColor: product?.tint ?? "#EDE6DA" }}
-                >
-                  {it.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={it.photoUrl}
-                      alt={it.photoName || it.name}
-                      className="h-full w-full object-cover"
-                    />
+                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
+                  {photoUrls.length > 0 ? (
+                    <div className={photoUrls.length === 1 ? "h-full w-full" : "grid h-full w-full grid-cols-2"}>
+                      {photoUrls.slice(0, 4).map((url, index) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={url}
+                          src={url}
+                          alt={`${it.name} photo ${index + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ))}
+                    </div>
                   ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center text-ink/45">
+                    <div
+                      className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center text-ink/45"
+                      style={{ backgroundColor: product?.tint ?? "#EDE6DA" }}
+                    >
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="opacity-50">
                         <path
                           d="M3 16l5-5 4 4 3-3 6 6M3 5h18v14H3z"
@@ -111,7 +117,7 @@ export default function CartPage() {
                   </div>
                   {it.photoName && (
                     <p className="truncate text-[12.5px] text-muted">
-                      <Editable eid="cart.photoLabel" fallback="Photo" />: {it.photoName}
+                      <Editable eid="cart.photoLabel" fallback="Photos" />: {it.photoName}
                     </p>
                   )}
                   <p className="break-words text-[12.5px] text-muted">{opts}</p>

@@ -12,6 +12,8 @@ export interface OrderItem {
   qty: number;
   options: Record<string, string>;
   photoUrl?: string;
+  photoUrls?: string[];
+  photoNames?: string[];
   category?: string;
 }
 

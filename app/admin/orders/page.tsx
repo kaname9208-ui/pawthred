@@ -9,6 +9,8 @@ interface OrderItem {
   qty?: number;
   options?: Record<string, string>;
   photoUrl?: string;
+  photoUrls?: string[];
+  photoNames?: string[];
   category?: string;
 }
 
@@ -224,16 +226,26 @@ export default function AdminOrdersPage() {
                 )}
                 {items.map((item, itemIndex) => (
                   <div key={itemIndex} className="flex gap-4 p-5">
-                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
-                      {item.photoUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={item.photoUrl}
-                          alt="Customer pet photo"
-                          className="h-full w-full object-cover"
-                        />
+                    <div className="grid w-28 shrink-0 grid-cols-2 gap-1">
+                      {(item.photoUrls?.length ? item.photoUrls : item.photoUrl ? [item.photoUrl] : []).length > 0 ? (
+                        (item.photoUrls?.length ? item.photoUrls : item.photoUrl ? [item.photoUrl] : []).slice(0, 3).map((url, photoIndex) => (
+                          <a
+                            key={url}
+                            href={url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="block overflow-hidden rounded-lg border border-line bg-paper"
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={url}
+                              alt={`Customer pet photo ${photoIndex + 1}`}
+                              className="aspect-square w-full object-cover"
+                            />
+                          </a>
+                        ))
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[11px] text-muted">
+                        <div className="flex aspect-square w-full items-center justify-center rounded-lg border border-line bg-paper text-[11px] text-muted">
                           no photo
                         </div>
                       )}
@@ -245,15 +257,10 @@ export default function AdminOrdersPage() {
                       <div className="mt-1 text-[13px] text-muted">
                         {formatUSD((Number(item.price) || 0) * (Number(item.qty) || 1))}
                       </div>
-                      {item.photoUrl && (
-                        <a
-                          href={item.photoUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="mt-1 inline-block text-[12.5px] font-medium text-warm-dark hover:underline"
-                        >
-                          Open full photo
-                        </a>
+                      {(item.photoNames?.length || item.photoUrls?.length) && (
+                        <div className="mt-1 text-[12.5px] text-muted">
+                          Photos: {(item.photoNames || item.photoUrls || []).length}
+                        </div>
                       )}
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {Object.entries(item.options || {}).map(([k, v]) => (

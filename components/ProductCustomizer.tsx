@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
-import { PhotoUploader } from "@/components/PhotoUploader";
+import { PhotoUploader, type UploadedPhoto } from "@/components/PhotoUploader";
 import { StickyCartCTA } from "@/components/StickyCartCTA";
 import { Editable } from "@/components/editable/Editable";
 import { cn } from "@/lib/format";
@@ -21,7 +21,7 @@ export function ProductCustomizer({
 }) {
   const { addItem } = useCart();
 
-  const [photo, setPhoto] = useState<{ name: string; previewUrl: string; photoUrl?: string } | null>(null);
+  const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
   const [petCount, setPetCount] = useState(1);
   const [selections, setSelections] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
@@ -44,7 +44,7 @@ export function ProductCustomizer({
   }
 
   function handleAdd() {
-    if (!photo) return;
+    if (photos.length === 0) return;
     addItem({
       slug: product.slug,
       name: product.name,
@@ -55,14 +55,16 @@ export function ProductCustomizer({
         ...selections,
         ...(selectedColor ? { color: selectedColor } : {}),
       },
-      photoName: photo.name,
-      photoUrl: photo.photoUrl,
+      photoName: photos.map((photo) => photo.name).join(", "),
+      photoUrl: photos.find((photo) => photo.photoUrl)?.photoUrl,
+      photoNames: photos.map((photo) => photo.name),
+      photoUrls: photos.map((photo) => photo.photoUrl).filter(Boolean) as string[],
       category: product.category,
     });
     setAdded(true);
   }
 
-  const canAdd = !!photo;
+  const canAdd = photos.length > 0;
 
   return (
     <div className="space-y-8">
@@ -71,7 +73,7 @@ export function ProductCustomizer({
         <h3 className="mb-3 font-display text-lg font-semibold text-ink">
           <Editable eid="customizer.step1" fallback="1 · Upload Pet Photo" />
         </h3>
-        <PhotoUploader onPhotoChange={setPhoto} />
+        <PhotoUploader maxPhotos={3} onPhotoChange={setPhotos} />
       </div>
 
       {/* Pet count */}
