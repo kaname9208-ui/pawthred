@@ -71,7 +71,6 @@ export const SEED_PRODUCTS: Product[] = [
         { value: "sky-blue", label: "Sky Blue", swatch: "#AFC4D5" },
         { value: "forest-green", label: "Forest Green", swatch: "#133D32" },
         { value: "burgundy", label: "Burgundy", swatch: "#6D1F2A" },
-        { value: "soft-pink", label: "Soft Pink", swatch: "#E7B7C7" },
       ]),
       sizeOption,
       embroideryStyleOption,

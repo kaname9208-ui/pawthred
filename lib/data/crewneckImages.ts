@@ -6,5 +6,4 @@ export const crewneckImages: Record<string, string> = {
   "sky-blue": "/products/custom-pet-crewneck/sky-blue.png",
   "forest-green": "/products/custom-pet-crewneck/forest-green.png",
   burgundy: "/products/custom-pet-crewneck/burgundy.png",
-  "soft-pink": "/products/custom-pet-crewneck/soft-pink.png",
 };
