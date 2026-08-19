@@ -21,6 +21,17 @@ export const sizeOption: CustomizeOption = {
   choices: SIZE_VALUES.map((v) => ({ value: v, label: v })),
 };
 
+export const tshirtSizeOption: CustomizeOption = {
+  id: "size",
+  label: "Size",
+  type: "select",
+  required: true,
+  choices: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"].map((v) => ({
+    value: v,
+    label: v,
+  })),
+};
+
 // 袜子专用：仅两个尺码（Small / Large）
 export const socksSizeOption: CustomizeOption = {
   id: "size",

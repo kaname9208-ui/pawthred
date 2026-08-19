@@ -3,6 +3,7 @@ import type { Product } from "@/lib/types";
 import {
   colorOption,
   sizeOption,
+  tshirtSizeOption,
   socksSizeOption,
   placementOption,
   embroideryStyleOption,
@@ -39,7 +40,7 @@ export const SEED_PRODUCTS: Product[] = [
         { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
         { value: "sage", label: "Sage", swatch: "#C7CDBF" },
       ]),
-      sizeOption,
+      tshirtSizeOption,
       embroideryStyleOption,
       placementOption,
       petNameOption,
