@@ -8,7 +8,7 @@ import { crewneckImages } from "@/lib/data/crewneckImages";
 
 export function ProductCard({ product }: { product: Product }) {
   const fallbackSrc =
-    product.slug === "custom-pet-crewneck" ? crewneckImages.rose : undefined;
+    product.slug === "custom-pet-crewneck" ? crewneckImages.cream : undefined;
 
   return (
     <Link href={`/products/${product.slug}`} className="group block">
