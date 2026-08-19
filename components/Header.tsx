@@ -67,8 +67,13 @@ export function Header() {
           <Icon name={open ? "close" : "menu"} />
         </button>
 
-        <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">
-          <Editable eid="brand.name" fallback={siteConfig.brandName} />
+        <Link href="/" className="flex items-center" aria-label={siteConfig.brandName}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/pawthred-wordmark.png"
+            alt={siteConfig.brandName}
+            className="h-10 w-auto object-contain"
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-7 text-[13.5px] font-medium text-charcoal">

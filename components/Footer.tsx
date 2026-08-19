@@ -43,8 +43,19 @@ export function Footer() {
     <footer className="border-t border-line bg-paper">
       <div className="container-page grid grid-cols-2 gap-10 py-14 md:grid-cols-5">
         <div className="col-span-2">
-          <div className="font-display text-xl font-semibold text-ink">
-            <Editable eid="brand.name" fallback={siteConfig.brandName} />
+          <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/pawthred-mark.png"
+              alt=""
+              className="h-11 w-11 object-contain"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/pawthred-wordmark.png"
+              alt={siteConfig.brandName}
+              className="h-9 w-auto object-contain"
+            />
           </div>
           <p className="mt-3 max-w-xs text-sm text-muted">
             <Editable eid="footer.tagline" fallback={siteConfig.tagline} />
@@ -90,7 +101,7 @@ export function Footer() {
         <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-[12.5px] text-muted sm:flex-row">
           <span>
             © {new Date().getFullYear()}{" "}
-            <Editable eid="brand.name" fallback={siteConfig.brandName} />. All rights reserved.
+            {siteConfig.brandName}. All rights reserved.
           </span>
           <div className="flex gap-5">
             {legal.map((l, i) => (

@@ -4,10 +4,10 @@ export const siteConfig = {
   // 站点正式域名（上线后改成你的真实域名；也支持 NEXT_PUBLIC_SITE_URL 覆盖）
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://pawandthread.com",
   // 临时品牌占位，可经环境变量覆盖
-  brandName: process.env.NEXT_PUBLIC_SITE_NAME || "Paw & Thread",
+  brandName: process.env.NEXT_PUBLIC_SITE_NAME || "Pawthred",
   tagline: "Turn your pet into something you can wear.",
   description:
-    "Paw & Thread turns your favorite pet photo into a custom embroidered tee, hoodie or socks. Premium stitching, made to order, shipped from the USA.",
+    "Pawthred turns your favorite pet photo into a custom embroidered tee, hoodie or socks. Premium stitching, made to order, shipped from the USA.",
   announcement: "Buy 2+ apparel, save $5 each · Free shipping on orders $100+",
   freeShippingThreshold: 100,
   shippingFee: 6,
