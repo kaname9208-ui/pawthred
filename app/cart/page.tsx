@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { itemKey } from "@/components/CartProvider";
-import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 import { siteConfig } from "@/lib/config/site.config";
 import { formatUSD } from "@/lib/format";
@@ -70,14 +69,35 @@ export default function CartPage() {
               .join(" · ");
             return (
               <div key={key} className="flex gap-4 rounded-xl2 border border-line bg-paper p-4">
-                <ImageSlot
-                  eid={`product.${it.slug}.img`}
-                  ratio="1/1"
-                  tint={product?.tint ?? "#EDE6DA"}
-                  fallbackLabel={it.name}
-                  className="h-24 w-24 shrink-0"
-                />
-                <div className="flex-1">
+                <div
+                  className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-paper"
+                  style={{ backgroundColor: product?.tint ?? "#EDE6DA" }}
+                >
+                  {it.photoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={it.photoUrl}
+                      alt={it.photoName || it.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center text-ink/45">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="opacity-50">
+                        <path
+                          d="M3 16l5-5 4 4 3-3 6 6M3 5h18v14H3z"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinejoin="round"
+                        />
+                        <circle cx="8.5" cy="9" r="1.6" fill="currentColor" />
+                      </svg>
+                      <span className="text-[10px] font-medium uppercase leading-tight">
+                        {it.photoName ? "Pet photo" : "Product"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="font-display text-[17px] font-semibold text-ink">
                       <Editable eid={`product.${it.slug}.name`} fallback={it.name} />
@@ -90,11 +110,11 @@ export default function CartPage() {
                     </button>
                   </div>
                   {it.photoName && (
-                    <p className="text-[12.5px] text-muted">
+                    <p className="truncate text-[12.5px] text-muted">
                       <Editable eid="cart.photoLabel" fallback="Photo" />: {it.photoName}
                     </p>
                   )}
-                  <p className="text-[12.5px] text-muted">{opts}</p>
+                  <p className="break-words text-[12.5px] text-muted">{opts}</p>
                   <div className="mt-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button
