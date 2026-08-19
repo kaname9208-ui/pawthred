@@ -42,6 +42,22 @@ interface EditCtx {
 
 const Ctx = createContext<EditCtx | null>(null);
 
+function sanitizeRecord(input: unknown): Record<string, string> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  return Object.fromEntries(
+    Object.entries(input as Record<string, unknown>).filter(
+      ([, value]) => typeof value === "string"
+    )
+  ) as Record<string, string>;
+}
+
+function sanitizeOverrides(input: any): Overrides {
+  return {
+    text: sanitizeRecord(input?.text),
+    image: sanitizeRecord(input?.image),
+  };
+}
+
 export function EditProvider({ children }: { children: React.ReactNode }) {
   const [overrides, setOverrides] = useState<Overrides>({ text: {}, image: {} });
   const [editing, setEditing] = useState(false);
@@ -69,10 +85,7 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
         const edits = await editsRes.json().catch(() => ({ text: {}, image: {} }));
         if (cancelled) return;
         setAuthed(!!auth.authed);
-        setOverrides({
-          text: edits?.text ?? {},
-          image: edits?.image ?? {},
-        });
+        setOverrides(sanitizeOverrides(edits));
       } catch {
         /* 离线/失败时不阻塞页面 */
       } finally {
@@ -149,7 +162,7 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
       // 重新拉取最新已发布编辑（可能别的设备改过）
       const editsRes = await fetch("/api/edits");
       const edits = await editsRes.json().catch(() => ({ text: {}, image: {} }));
-      setOverrides({ text: edits?.text ?? {}, image: edits?.image ?? {} });
+      setOverrides(sanitizeOverrides(edits));
       return true;
     } catch {
       return false;
@@ -211,9 +224,11 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
       exportJson,
       hasEdits:
         Object.keys(overrides.text).length + Object.keys(overrides.image).length > 0,
-      getText: (eid, fallback) => overrides.text[eid] ?? fallback,
+      getText: (eid, fallback) =>
+        typeof overrides.text[eid] === "string" ? overrides.text[eid] : fallback,
       setText,
-      getImage: (eid) => overrides.image[eid] ?? null,
+      getImage: (eid) =>
+        typeof overrides.image[eid] === "string" ? overrides.image[eid] : null,
       setImage,
       removeImage,
       uploadImage,

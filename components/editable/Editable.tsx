@@ -13,7 +13,8 @@ interface Props {
 // 可点击编辑的文字块。编辑模式下点击即选中该字段，由 EditorUI 抽屉编辑。
 export function Editable({ eid, fallback, as = "span", className }: Props) {
   const { editing, getText, active, setActive } = useEdit();
-  const text = getText(eid, fallback);
+  const value = getText(eid, fallback);
+  const text = typeof value === "string" ? value : fallback;
   const isActive = editing && active?.type === "text" && active.eid === eid;
 
   const Tag = as as any;

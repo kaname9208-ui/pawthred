@@ -13,6 +13,23 @@ type Overrides = {
   image: Record<string, string>;
 };
 
+function sanitizeRecord(input: unknown): Record<string, string> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  return Object.fromEntries(
+    Object.entries(input as Record<string, unknown>).filter(
+      ([, value]) => typeof value === "string"
+    )
+  ) as Record<string, string>;
+}
+
+function sanitizeOverrides(input: Partial<Overrides> | unknown): Overrides {
+  const value = input as Partial<Overrides> | undefined;
+  return {
+    text: sanitizeRecord(value?.text),
+    image: sanitizeRecord(value?.image),
+  };
+}
+
 async function readEdits(): Promise<Overrides> {
   const token = process.env.BLOB_READ_WRITE_TOKEN;
   if (!token) return { text: {}, image: {} };
@@ -23,7 +40,7 @@ async function readEdits(): Promise<Overrides> {
     const res = await fetch(found.url);
     if (!res.ok) return { text: {}, image: {} };
     const json = (await res.json()) as Partial<Overrides>;
-    return { text: json?.text ?? {}, image: json?.image ?? {} };
+    return sanitizeOverrides(json);
   } catch {
     return { text: {}, image: {} };
   }
@@ -50,10 +67,7 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
-  const edits: Overrides = {
-    text: body.text ?? {},
-    image: body.image ?? {},
-  };
+  const edits = sanitizeOverrides(body);
   try {
     // 先用固定路径删除旧文件（若存在），再写入，保证覆盖更新
     try {
