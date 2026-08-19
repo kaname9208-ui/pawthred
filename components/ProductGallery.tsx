@@ -5,6 +5,7 @@ import type { Choice } from "@/lib/types";
 import { ImageSlot } from "@/components/editable/ImageSlot";
 import { useEdit } from "@/components/editable/EditProvider";
 import { cn } from "@/lib/format";
+import { tshirtImages } from "@/lib/data/tshirtImages";
 import { crewneckImages } from "@/lib/data/crewneckImages";
 import { hoodieImages } from "@/lib/data/hoodieImages";
 
@@ -22,9 +23,16 @@ interface Props {
 export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColorChange }: Props) {
   const { editing } = useEdit();
   const [index, setIndex] = useState(0);
+  const isTShirt = slug === "custom-pet-t-shirt" && !!colorChoices?.length;
   const isCrewneck = slug === "custom-pet-crewneck" && !!colorChoices?.length;
   const isHoodie = slug === "custom-pet-hoodie" && !!colorChoices?.length;
-  const linkedImages = isCrewneck ? crewneckImages : isHoodie ? hoodieImages : null;
+  const linkedImages = isTShirt
+    ? tshirtImages
+    : isCrewneck
+      ? crewneckImages
+      : isHoodie
+        ? hoodieImages
+        : null;
 
   const selectedColorIndex = useMemo(() => {
     if (!colorChoices?.length) return 0;

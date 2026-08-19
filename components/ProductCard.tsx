@@ -4,12 +4,15 @@ import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 import { Stars } from "@/components/Stars";
 import { formatUSD } from "@/lib/format";
+import { tshirtImages } from "@/lib/data/tshirtImages";
 import { crewneckImages } from "@/lib/data/crewneckImages";
 import { hoodieImages } from "@/lib/data/hoodieImages";
 
 export function ProductCard({ product }: { product: Product }) {
   const fallbackSrc =
-    product.slug === "custom-pet-crewneck"
+    product.slug === "custom-pet-t-shirt"
+      ? tshirtImages.white
+      : product.slug === "custom-pet-crewneck"
       ? crewneckImages.cream
       : product.slug === "custom-pet-hoodie"
         ? hoodieImages.khaki
