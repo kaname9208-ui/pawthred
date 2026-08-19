@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/Hero";
-import { CategoryGrid } from "@/components/CategoryGrid";
 import { ValueProps } from "@/components/ValueProps";
 import { HowItWorks } from "@/components/HowItWorks";
 import { ProductGrid } from "@/components/ProductGrid";
@@ -25,26 +24,23 @@ export default function HomePage() {
     <>
       <Hero />
 
-      <CategoryGrid />
-
-      <ValueProps />
-
-      <HowItWorks />
-
-      {/* Best Sellers */}
       <section className="container-page section">
         <div className="mb-10 flex items-end justify-between gap-4">
           <div>
             <span className="eyebrow">
-              <Editable eid="home.bestsellers.eyebrow" fallback="Best Sellers" />
+              <Editable eid="home.bestsellers.eyebrow" fallback="Shop Favorites" />
             </span>
             <h2 className="h-display mt-3 text-3xl sm:text-4xl">
-              <Editable eid="home.bestsellers.title" fallback="Start with a favorite" />
+              <Editable eid="home.bestsellers.title" fallback="Choose your custom piece" />
             </h2>
           </div>
         </div>
-        <ProductGrid products={products.slice(0, 6)} />
+        <ProductGrid products={products.slice(0, 3)} />
       </section>
+
+      <ValueProps />
+
+      <HowItWorks />
 
       {/* Embroidery close-up showcase */}
       <section className="bg-paper">
