@@ -18,46 +18,65 @@ interface Props {
   onColorChange: (v: string) => void;
 }
 
-// 商品图廊：大图 + 缩略图条 + 翻页（左右箭头 / 点缩略图）。
-// 每个颜色对应自己的一组图片（eid 按颜色区分），选择颜色即切换整组图。
 export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColorChange }: Props) {
   const { editing } = useEdit();
   const [index, setIndex] = useState(0);
+  const isCrewneck = slug === "custom-pet-crewneck" && !!colorChoices?.length;
 
-  // 切换颜色时，回到该颜色的第一张
-  useEffect(() => setIndex(0), [selectedColor]);
+  const selectedColorIndex = useMemo(() => {
+    if (!colorChoices?.length) return 0;
+    return Math.max(0, colorChoices.findIndex((c) => c.value === selectedColor));
+  }, [colorChoices, selectedColor]);
+
+  useEffect(() => {
+    setIndex(isCrewneck ? selectedColorIndex : 0);
+  }, [isCrewneck, selectedColorIndex, selectedColor]);
 
   const base = colorChoices?.length
     ? `product.${slug}.c.${selectedColor}`
     : `product.${slug}.g`;
 
-  const eids = useMemo(
-    () => Array.from({ length: PER_COLOR }, (_, i) => `${base}.${i}`),
-    [base]
-  );
+  const slides = useMemo(() => {
+    if (isCrewneck && colorChoices?.length) {
+      return colorChoices.map((color) => ({
+        color,
+        eid: `product.${slug}.c.${color.value}.0`,
+        label: color.label,
+        src: crewneckImages[color.value],
+      }));
+    }
 
-  function go(delta: number) {
-    setIndex((i) => (i + delta + PER_COLOR) % PER_COLOR);
+    return Array.from({ length: PER_COLOR }, (_, i) => ({
+      color: null,
+      eid: `${base}.${i}`,
+      label: LABELS[i],
+      src: undefined,
+    }));
+  }, [base, colorChoices, isCrewneck, slug]);
+
+  const activeSlide = slides[index] ?? slides[0];
+  const activeColorLabel =
+    activeSlide?.color?.label ?? colorChoices?.find((c) => c.value === selectedColor)?.label;
+
+  function selectSlide(next: number) {
+    const slide = slides[next];
+    setIndex(next);
+    if (slide?.color?.value) onColorChange(slide.color.value);
   }
 
-  const bigEid = eids[index];
-  const activeColorLabel = colorChoices?.find((c) => c.value === selectedColor)?.label;
-  const staticSrc =
-    slug === "custom-pet-crewneck" && index === 0
-      ? crewneckImages[selectedColor]
-      : undefined;
+  function go(delta: number) {
+    selectSlide((index + delta + slides.length) % slides.length);
+  }
 
   return (
     <div>
-      {/* 主图 + 翻页箭头 */}
       <div className="relative">
-        {/* 编辑模式下，点击大图即上传；展示模式下不可点（缩略图负责切换） */}
         <ImageSlot
-          eid={bigEid}
+          eid={activeSlide?.eid ?? `${base}.0`}
           ratio="4/5"
           tint={tint}
-          fallbackLabel={LABELS[index]}
-          fallbackSrc={staticSrc}
+          fallbackLabel={activeSlide?.label ?? LABELS[index] ?? "Product image"}
+          fallbackSrc={activeSlide?.src}
           className="mb-0"
         />
         <button
@@ -83,37 +102,29 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
         )}
       </div>
 
-      {/* 缩略图：点击任意一张即拉到大图 */}
       <div className="mt-3 grid grid-cols-5 gap-2">
-        {eids.map((eid, i) => (
+        {slides.map((slide, i) => (
           <div
-            key={eid}
+            key={slide.eid}
             onClick={() => {
-              if (!editing) setIndex(i);
+              if (!editing) selectSlide(i);
             }}
             className={cn(
               "cursor-pointer overflow-hidden rounded-xl2 transition",
-              index === i
-                ? "ring-2 ring-ink"
-                : "opacity-80 ring-1 ring-line hover:opacity-100"
+              index === i ? "ring-2 ring-ink" : "opacity-80 ring-1 ring-line hover:opacity-100"
             )}
           >
             <ImageSlot
-              eid={eid}
+              eid={slide.eid}
               ratio="1/1"
               tint={tint}
-              fallbackLabel={LABELS[i]}
-              fallbackSrc={
-                slug === "custom-pet-crewneck" && i === 0
-                  ? crewneckImages[selectedColor]
-                  : undefined
-              }
+              fallbackLabel={slide.label ?? LABELS[i] ?? "Product image"}
+              fallbackSrc={slide.src}
             />
           </div>
         ))}
       </div>
 
-      {/* 颜色标签（点击切换颜色，与右侧定制器联动） */}
       {colorChoices?.length ? (
         <div className="mt-4">
           <div className="mb-2 text-[13px] font-medium text-muted">
@@ -129,7 +140,7 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
                 aria-label={c.label}
                 className={cn(
                   "h-9 w-9 rounded-full border-2 transition-transform",
-                  selectedColor === c.value ? "border-ink scale-110" : "border-line"
+                  selectedColor === c.value ? "scale-110 border-ink" : "border-line"
                 )}
                 style={{ backgroundColor: c.swatch }}
               />

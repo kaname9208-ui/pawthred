@@ -9,6 +9,60 @@ import { StickyCartCTA } from "@/components/StickyCartCTA";
 import { Editable } from "@/components/editable/Editable";
 import { cn } from "@/lib/format";
 
+function EmbroideryPreview({ type, label }: { type: string; label: string }) {
+  const isPlacement = ["left-chest", "front-center", "back-center"].includes(type);
+  const isBack = type === "back-center";
+  const positionClass =
+    type === "left-chest"
+      ? "left-[38%] top-[35%] scale-75"
+      : type === "front-center" || type === "back-center"
+        ? "left-1/2 top-[46%] -translate-x-1/2 scale-95"
+        : "left-1/2 top-[45%] -translate-x-1/2";
+
+  return (
+    <span className="block">
+      <span className="relative mx-auto mb-2 block h-20 w-24">
+        <span
+          className={cn(
+            "absolute inset-x-2 top-1 h-[70px] rounded-b-2xl rounded-t-lg border border-line bg-cream",
+            isBack && "bg-stone-100"
+          )}
+        />
+        <span className="absolute left-0 top-3 h-6 w-7 rounded-full bg-cream shadow-[inset_0_0_0_1px_rgba(41,31,24,0.12)]" />
+        <span className="absolute right-0 top-3 h-6 w-7 rounded-full bg-cream shadow-[inset_0_0_0_1px_rgba(41,31,24,0.12)]" />
+        <span className="absolute left-1/2 top-1 h-4 w-8 -translate-x-1/2 rounded-b-full border-b border-line bg-paper" />
+        {isPlacement ? (
+          <span className={cn("absolute text-center", positionClass)}>
+            <span className="relative mx-auto block h-6 w-6 rounded-full border border-ink/30 bg-white">
+              <span className="absolute -left-1 top-0 h-3 w-3 rotate-[-25deg] rounded-sm border border-ink/30 bg-white" />
+              <span className="absolute -right-1 top-0 h-3 w-3 rotate-[25deg] rounded-sm border border-ink/30 bg-white" />
+              <span className="absolute left-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
+              <span className="absolute right-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
+              <span className="absolute left-1/2 top-[15px] h-1 w-2 -translate-x-1/2 rounded-full border-b border-ink" />
+            </span>
+            <span className="mt-0.5 block text-[8px] font-bold leading-none text-warm-dark">MIMI</span>
+          </span>
+        ) : (
+          <span className={cn("absolute text-center", positionClass)}>
+            {type !== "name-only" && (
+              <span className="relative mx-auto block h-6 w-6 rounded-full border border-ink/30 bg-white">
+                <span className="absolute -left-1 top-0 h-3 w-3 rotate-[-25deg] rounded-sm border border-ink/30 bg-white" />
+                <span className="absolute -right-1 top-0 h-3 w-3 rotate-[25deg] rounded-sm border border-ink/30 bg-white" />
+                <span className="absolute left-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
+                <span className="absolute right-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
+              </span>
+            )}
+            {type !== "portrait-only" && (
+              <span className="mt-0.5 block text-[8px] font-bold leading-none text-warm-dark">MIMI</span>
+            )}
+          </span>
+        )}
+      </span>
+      <span className="block text-[12.5px] font-semibold text-ink">{label}</span>
+    </span>
+  );
+}
+
 export function ProductCustomizer({
   product,
   selectedColor = "",
@@ -65,20 +119,6 @@ export function ProductCustomizer({
   }
 
   const canAdd = photos.length > 0;
-
-  function optionIcon(id: string, value: string) {
-    if (id === "embroideryStyle") {
-      if (value === "portrait-name") return "PET + NAME";
-      if (value === "name-only") return "NAME";
-      return "PET";
-    }
-    if (id === "placement") {
-      if (value === "front-center") return "FRONT";
-      if (value === "back-center") return "BACK";
-      return "LEFT";
-    }
-    return value;
-  }
 
   return (
     <div className="space-y-8">
@@ -162,10 +202,7 @@ export function ProductCustomizer({
                         : "border-line hover:border-ink/40"
                     )}
                   >
-                    <span className="mx-auto mb-2 flex h-10 w-12 items-center justify-center rounded-lg bg-cream text-[10px] font-bold text-warm-dark">
-                      {optionIcon(opt.id, c.value)}
-                    </span>
-                    <span className="block text-[12.5px] font-semibold text-ink">{c.label}</span>
+                    <EmbroideryPreview type={c.value} label={c.label} />
                   </button>
                 ))}
               </div>
