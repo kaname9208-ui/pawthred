@@ -10,6 +10,7 @@ interface Props {
   ratio?: string;
   tint?: string;
   fallbackLabel?: string;
+  fallbackSrc?: string;
   className?: string;
   rounded?: boolean;
 }
@@ -21,6 +22,7 @@ export function ImageSlot({
   ratio = "4/5",
   tint = "#EDE6DA",
   fallbackLabel,
+  fallbackSrc,
   className,
   rounded = true,
 }: Props) {
@@ -66,7 +68,7 @@ export function ImageSlot({
         onChange={(e) => onFile(e.target.files?.[0])}
       />
 
-      {src ? (
+      {src || fallbackSrc ? (
         <div
           className={cn(
             "relative w-full overflow-hidden",
@@ -77,7 +79,7 @@ export function ImageSlot({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={src}
+            src={src || fallbackSrc}
             alt={fallbackLabel ?? "custom image"}
             className="absolute inset-0 h-full w-full object-cover"
           />

@@ -5,6 +5,7 @@ import {
   sizeOption,
   socksSizeOption,
   placementOption,
+  embroideryStyleOption,
   petNameOption,
   fleeceOption,
 } from "@/lib/data/options";
@@ -21,8 +22,8 @@ export const SEED_PRODUCTS: Product[] = [
     name: "Custom Pet Embroidered T-Shirt",
     category: "t-shirts",
     categoryLabel: "T-Shirts",
-    priceFrom: 59.99,
-    priceOriginal: 69.99,
+    priceFrom: 49.9,
+    priceOriginal: 59.9,
     reviews: 1298,
     rating: 4.8,
     ratio: "4/5",
@@ -39,6 +40,7 @@ export const SEED_PRODUCTS: Product[] = [
         { value: "sage", label: "Sage", swatch: "#C7CDBF" },
       ]),
       sizeOption,
+      embroideryStyleOption,
       placementOption,
       petNameOption,
     ],
@@ -48,25 +50,29 @@ export const SEED_PRODUCTS: Product[] = [
     name: "Custom Pet Embroidered Crewneck",
     category: "hoodies",
     categoryLabel: "Hoodies",
-    priceFrom: 69.99,
-    priceOriginal: 79.99,
+    priceFrom: 59.9,
+    priceOriginal: 69.9,
     reviews: 906,
     rating: 4.9,
     ratio: "4/5",
     tint: "#E9D9C2",
     blurb: "Classic comfort, quietly personal.",
     description:
-      "A timeless crewneck sweatshirt with your pet's portrait stitched at the chest. Clean lines, premium cotton blend, and a fit that works for any season.",
-    perExtraPet: 12,
+      "A custom embroidered pet portrait crewneck sweatshirt made for everyday comfort, thoughtful gifts, and keepsake moments. Choose your sweatshirt color, embroidery format, placement, pet name, and up to three pet photos for a clean hand-drawn embroidery design.",
+    perExtraPet: 10,
     options: [
       colorOption([
         { value: "cream", label: "Cream", swatch: "#F3ECE0" },
-        { value: "black", label: "Black", swatch: "#1A1A1A" },
+        { value: "charcoal", label: "Charcoal", swatch: "#5B5752" },
         { value: "heather-grey", label: "Heather Grey", swatch: "#B8B2A8" },
-        { value: "sage", label: "Sage", swatch: "#C7CDBF" },
-        { value: "navy", label: "Navy", swatch: "#2C3A4B" },
+        { value: "sage", label: "Sage", swatch: "#71826F" },
+        { value: "forest-green", label: "Forest Green", swatch: "#1F5A48" },
+        { value: "pink", label: "Soft Pink", swatch: "#E8B6C5" },
+        { value: "burgundy", label: "Burgundy", swatch: "#7B1F2D" },
+        { value: "rose", label: "Rose", swatch: "#C95272" },
       ]),
       sizeOption,
+      embroideryStyleOption,
       placementOption,
       petNameOption,
       fleeceOption,
@@ -77,8 +83,8 @@ export const SEED_PRODUCTS: Product[] = [
     name: "Custom Pet Embroidered Hoodie",
     category: "hoodies",
     categoryLabel: "Hoodies",
-    priceFrom: 69.99,
-    priceOriginal: 79.99,
+    priceFrom: 59.9,
+    priceOriginal: 69.9,
     reviews: 742,
     rating: 4.9,
     ratio: "4/5",
@@ -86,7 +92,7 @@ export const SEED_PRODUCTS: Product[] = [
     blurb: "Cozy, and unmistakably yours.",
     description:
       "A soft pullover hoodie with your pet's portrait embroidered at the chest. Drawstring hood, roomy kangaroo pocket, and a fleece-optional interior built for lazy weekends and long walks.",
-    perExtraPet: 12,
+    perExtraPet: 10,
     options: [
       colorOption([
         { value: "cream", label: "Cream", swatch: "#F3ECE0" },
@@ -96,6 +102,7 @@ export const SEED_PRODUCTS: Product[] = [
         { value: "navy", label: "Navy", swatch: "#2C3A4B" },
       ]),
       sizeOption,
+      embroideryStyleOption,
       placementOption,
       petNameOption,
       fleeceOption,
@@ -115,7 +122,7 @@ export const SEED_PRODUCTS: Product[] = [
     blurb: "Every step, a little closer.",
     description:
       "Soft combed-cotton crew socks with your pet's face embroidered at the ankle. Cushioned sole, stay-up fit, and a small daily dose of joy with every step.",
-    perExtraPet: 6,
+    perExtraPet: 10,
     options: [
       colorOption([
         { value: "cream", label: "Cream", swatch: "#F3ECE0" },
@@ -177,6 +184,7 @@ export async function getProducts(): Promise<Product[]> {
   return SEED_PRODUCTS.map((seed) => {
     const cat = catalog.find((c) => c.slug === seed.slug);
     if (!cat) return seed;
+    if (seed.slug === "custom-pet-crewneck") return seed;
     const seedColor = seed.options.find((o) => o.id === "color");
     const catColor = cat.options?.find((o) => o.id === "color");
     if (seedColor && catColor?.choices?.length) {

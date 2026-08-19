@@ -5,6 +5,7 @@ import type { Choice } from "@/lib/types";
 import { ImageSlot } from "@/components/editable/ImageSlot";
 import { useEdit } from "@/components/editable/EditProvider";
 import { cn } from "@/lib/format";
+import { crewneckImages } from "@/lib/data/crewneckImages";
 
 const LABELS = ["Front view", "Close-up embroidery", "Model wearing", "Lifestyle shot", "Detail"];
 const PER_COLOR = 5;
@@ -41,6 +42,10 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
 
   const bigEid = eids[index];
   const activeColorLabel = colorChoices?.find((c) => c.value === selectedColor)?.label;
+  const staticSrc =
+    slug === "custom-pet-crewneck" && index === 0
+      ? crewneckImages[selectedColor]
+      : undefined;
 
   return (
     <div>
@@ -52,6 +57,7 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
           ratio="4/5"
           tint={tint}
           fallbackLabel={LABELS[index]}
+          fallbackSrc={staticSrc}
           className="mb-0"
         />
         <button
@@ -92,7 +98,17 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
                 : "opacity-80 ring-1 ring-line hover:opacity-100"
             )}
           >
-            <ImageSlot eid={eid} ratio="1/1" tint={tint} fallbackLabel={LABELS[i]} />
+            <ImageSlot
+              eid={eid}
+              ratio="1/1"
+              tint={tint}
+              fallbackLabel={LABELS[i]}
+              fallbackSrc={
+                slug === "custom-pet-crewneck" && i === 0
+                  ? crewneckImages[selectedColor]
+                  : undefined
+              }
+            />
           </div>
         ))}
       </div>

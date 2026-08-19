@@ -43,6 +43,7 @@ interface Order {
 const OPT_LABELS: Record<string, string> = {
   color: "Color",
   size: "Size",
+  embroideryStyle: "Embroidery Style",
   placement: "Placement",
   petName: "Name",
   pets: "Pets",

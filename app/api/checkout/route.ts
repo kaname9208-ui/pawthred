@@ -19,7 +19,7 @@ interface CheckoutItem {
 }
 
 function variantLabel(options?: Record<string, string>, photoUrl?: string): string {
-  const order = ["color", "size", "placement", "petName", "pets", "fleece"];
+  const order = ["color", "size", "embroideryStyle", "placement", "petName", "pets", "fleece"];
   const parts = Object.keys(options || {})
     .sort((a, b) => order.indexOf(a) - order.indexOf(b))
     .filter((k) => options?.[k])

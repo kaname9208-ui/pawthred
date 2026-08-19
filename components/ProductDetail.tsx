@@ -7,6 +7,7 @@ import { Stars } from "@/components/Stars";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductCustomizer } from "@/components/ProductCustomizer";
 import { formatUSD } from "@/lib/format";
+import { CrewneckSizeGuide } from "@/components/CrewneckSizeGuide";
 
 // 商品详情的两栏布局：左图廊 + 右信息与定制器。
 // 颜色选择状态在此统一持有，图廊与定制器共享，确保“选颜色即换图”。
@@ -18,19 +19,20 @@ export function ProductDetail({ product }: { product: Product }) {
   const [selectedColor, setSelectedColor] = useState(initialColor);
 
   return (
-    <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-      <ProductGallery
-        slug={product.slug}
-        tint={product.tint}
-        colorChoices={colorOpt?.choices}
-        selectedColor={selectedColor}
-        onColorChange={setSelectedColor}
-      />
+    <>
+      <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+        <ProductGallery
+          slug={product.slug}
+          tint={product.tint}
+          colorChoices={colorOpt?.choices}
+          selectedColor={selectedColor}
+          onColorChange={setSelectedColor}
+        />
 
-      <div>
-        <h1 className="h-display text-3xl sm:text-4xl">
-          <Editable eid={`product.${product.slug}.name`} fallback={product.name} />
-        </h1>
+        <div>
+          <h1 className="h-display text-3xl sm:text-4xl">
+            <Editable eid={`product.${product.slug}.name`} fallback={product.name} />
+          </h1>
         <div className="mt-3 flex items-center gap-2 text-[14px] text-muted">
           <Stars rating={product.rating} size={16} />
           <span>
@@ -54,14 +56,16 @@ export function ProductDetail({ product }: { product: Product }) {
           />
         </p>
 
-        <div className="mt-8 border-t border-line pt-8">
-          <ProductCustomizer
-            product={product}
-            selectedColor={selectedColor}
-            onColorChange={setSelectedColor}
-          />
+          <div className="mt-8 border-t border-line pt-8">
+            <ProductCustomizer
+              product={product}
+              selectedColor={selectedColor}
+              onColorChange={setSelectedColor}
+            />
+          </div>
         </div>
       </div>
-    </div>
+      {product.slug === "custom-pet-crewneck" && <CrewneckSizeGuide />}
+    </>
   );
 }

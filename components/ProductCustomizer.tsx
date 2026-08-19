@@ -66,6 +66,20 @@ export function ProductCustomizer({
 
   const canAdd = photos.length > 0;
 
+  function optionIcon(id: string, value: string) {
+    if (id === "embroideryStyle") {
+      if (value === "portrait-name") return "PET + NAME";
+      if (value === "name-only") return "NAME";
+      return "PET";
+    }
+    if (id === "placement") {
+      if (value === "front-center") return "FRONT";
+      if (value === "back-center") return "BACK";
+      return "LEFT";
+    }
+    return value;
+  }
+
   return (
     <div className="space-y-8">
       {/* Upload */}
@@ -135,7 +149,29 @@ export function ProductCustomizer({
               </div>
             )}
 
-            {opt.type === "select" && opt.id !== "color" && opt.choices && (
+            {opt.type === "select" && ["embroideryStyle", "placement"].includes(opt.id) && opt.choices && (
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                {opt.choices.map((c) => (
+                  <button
+                    key={c.value}
+                    onClick={() => setOpt(opt.id, c.value)}
+                    className={cn(
+                      "min-h-[92px] rounded-xl2 border bg-paper p-3 text-center transition-colors",
+                      selections[opt.id] === c.value
+                        ? "border-ink ring-2 ring-ink/10"
+                        : "border-line hover:border-ink/40"
+                    )}
+                  >
+                    <span className="mx-auto mb-2 flex h-10 w-12 items-center justify-center rounded-lg bg-cream text-[10px] font-bold text-warm-dark">
+                      {optionIcon(opt.id, c.value)}
+                    </span>
+                    <span className="block text-[12.5px] font-semibold text-ink">{c.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {opt.type === "select" && opt.id !== "color" && !["embroideryStyle", "placement"].includes(opt.id) && opt.choices && (
               <div className="flex flex-wrap gap-2">
                 {opt.choices.map((c) => (
                   <button
