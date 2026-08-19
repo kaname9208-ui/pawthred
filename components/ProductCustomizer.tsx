@@ -15,70 +15,30 @@ const embroideryStyleImages: Record<string, string> = {
   "name-only": "/options/embroidery-style-name-under.jpg",
 };
 
-function EmbroideryStylePreview({ type, label }: { type: string; label: string }) {
+const placementImages: Record<string, string> = {
+  "left-chest": "/options/placement-left-chest.jpg",
+  "front-center": "/options/placement-front-center.jpg",
+  "back-center": "/options/placement-back-center.jpg",
+};
+
+function ImageOptionPreview({
+  type,
+  label,
+  images,
+}: {
+  type: string;
+  label: string;
+  images: Record<string, string>;
+}) {
   return (
     <span className="block">
       <span className="relative mb-2 block aspect-square w-full overflow-hidden rounded-xl2 bg-white">
         <img
-          src={embroideryStyleImages[type]}
+          src={images[type]}
           alt=""
           className="h-full w-full object-cover"
           draggable={false}
         />
-      </span>
-      <span className="block text-[12.5px] font-semibold text-ink">{label}</span>
-    </span>
-  );
-}
-
-function EmbroideryPreview({ type, label }: { type: string; label: string }) {
-  const isPlacement = ["left-chest", "front-center", "back-center"].includes(type);
-  const isBack = type === "back-center";
-  const positionClass =
-    type === "left-chest"
-      ? "left-[38%] top-[35%] scale-75"
-      : type === "front-center" || type === "back-center"
-        ? "left-1/2 top-[46%] -translate-x-1/2 scale-95"
-        : "left-1/2 top-[45%] -translate-x-1/2";
-
-  return (
-    <span className="block">
-      <span className="relative mx-auto mb-2 block h-20 w-24">
-        <span
-          className={cn(
-            "absolute inset-x-2 top-1 h-[70px] rounded-b-2xl rounded-t-lg border border-line bg-cream",
-            isBack && "bg-stone-100"
-          )}
-        />
-        <span className="absolute left-0 top-3 h-6 w-7 rounded-full bg-cream shadow-[inset_0_0_0_1px_rgba(41,31,24,0.12)]" />
-        <span className="absolute right-0 top-3 h-6 w-7 rounded-full bg-cream shadow-[inset_0_0_0_1px_rgba(41,31,24,0.12)]" />
-        <span className="absolute left-1/2 top-1 h-4 w-8 -translate-x-1/2 rounded-b-full border-b border-line bg-paper" />
-        {isPlacement ? (
-          <span className={cn("absolute text-center", positionClass)}>
-            <span className="relative mx-auto block h-6 w-6 rounded-full border border-ink/30 bg-white">
-              <span className="absolute -left-1 top-0 h-3 w-3 rotate-[-25deg] rounded-sm border border-ink/30 bg-white" />
-              <span className="absolute -right-1 top-0 h-3 w-3 rotate-[25deg] rounded-sm border border-ink/30 bg-white" />
-              <span className="absolute left-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
-              <span className="absolute right-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
-              <span className="absolute left-1/2 top-[15px] h-1 w-2 -translate-x-1/2 rounded-full border-b border-ink" />
-            </span>
-            <span className="mt-0.5 block text-[8px] font-bold leading-none text-warm-dark">MIMI</span>
-          </span>
-        ) : (
-          <span className={cn("absolute text-center", positionClass)}>
-            {type !== "name-only" && (
-              <span className="relative mx-auto block h-6 w-6 rounded-full border border-ink/30 bg-white">
-                <span className="absolute -left-1 top-0 h-3 w-3 rotate-[-25deg] rounded-sm border border-ink/30 bg-white" />
-                <span className="absolute -right-1 top-0 h-3 w-3 rotate-[25deg] rounded-sm border border-ink/30 bg-white" />
-                <span className="absolute left-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
-                <span className="absolute right-[7px] top-[10px] h-1 w-1 rounded-full bg-ink" />
-              </span>
-            )}
-            {type !== "portrait-only" && (
-              <span className="mt-0.5 block text-[8px] font-bold leading-none text-warm-dark">MIMI</span>
-            )}
-          </span>
-        )}
       </span>
       <span className="block text-[12.5px] font-semibold text-ink">{label}</span>
     </span>
@@ -224,7 +184,7 @@ export function ProductCustomizer({
                         : "border-line hover:border-ink/40"
                     )}
                   >
-                    <EmbroideryStylePreview type={c.value} label={c.label} />
+                    <ImageOptionPreview type={c.value} label={c.label} images={embroideryStyleImages} />
                   </button>
                 ))}
               </div>
@@ -243,7 +203,7 @@ export function ProductCustomizer({
                         : "border-line hover:border-ink/40"
                     )}
                   >
-                    <EmbroideryPreview type={c.value} label={c.label} />
+                    <ImageOptionPreview type={c.value} label={c.label} images={placementImages} />
                   </button>
                 ))}
               </div>
