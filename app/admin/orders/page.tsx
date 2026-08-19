@@ -16,13 +16,25 @@ interface OrderItem {
 interface Order {
   id: string;
   sessionId?: string;
+  paymentIntentId?: string;
   email?: string;
+  customerName?: string;
+  phone?: string;
+  shippingAddress?: {
+    line1?: string;
+    line2?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  };
   items: OrderItem[];
   subtotal: number;
   discount: number;
   shipping: number;
   total: number;
   createdAt: string;
+  paidAt?: string;
   status: "paid" | "pending";
 }
 
@@ -45,6 +57,14 @@ function fmtDate(iso: string) {
   } catch {
     return iso;
   }
+}
+
+function formatAddress(order: Order) {
+  const a = order.shippingAddress;
+  if (!a) return "";
+  return [a.line1, a.line2, a.city, a.state, a.postalCode, a.country]
+    .filter(Boolean)
+    .join(", ");
 }
 
 export default function AdminOrdersPage() {
@@ -155,6 +175,14 @@ export default function AdminOrdersPage() {
                 <span className="font-semibold text-ink">{formatUSD(o.total)}</span>
               </div>
             </div>
+
+            {(o.customerName || o.phone || formatAddress(o)) && (
+              <div className="border-b border-line bg-cream px-5 py-3 text-[13px] text-charcoal">
+                {o.customerName && <div>Name: {o.customerName}</div>}
+                {o.phone && <div>Phone: {o.phone}</div>}
+                {formatAddress(o) && <div>Ship to: {formatAddress(o)}</div>}
+              </div>
+            )}
 
             <div className="divide-y divide-line">
               {o.items.map((it, i) => (

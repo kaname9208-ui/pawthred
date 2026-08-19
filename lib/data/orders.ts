@@ -18,13 +18,25 @@ export interface OrderItem {
 export interface Order {
   id: string;
   sessionId?: string;
+  paymentIntentId?: string;
   email?: string;
+  customerName?: string;
+  phone?: string;
+  shippingAddress?: {
+    line1?: string;
+    line2?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  };
   items: OrderItem[];
   subtotal: number;
   discount: number;
   shipping: number;
   total: number;
   createdAt: string;
+  paidAt?: string;
   status: "paid" | "pending";
 }
 
@@ -65,4 +77,32 @@ export async function appendOrder(order: Order): Promise<void> {
   const current = await readRaw();
   current.push(order);
   await writeOrders(current);
+}
+
+export async function upsertOrder(order: Order): Promise<void> {
+  const current = await readRaw();
+  const idx = current.findIndex((o) => o.id === order.id);
+  if (idx >= 0) {
+    current[idx] = { ...current[idx], ...order };
+  } else {
+    current.push(order);
+  }
+  await writeOrders(current);
+}
+
+export async function markOrderPaid(
+  orderId: string,
+  updates: Partial<Order>
+): Promise<Order | null> {
+  const current = await readRaw();
+  const idx = current.findIndex((o) => o.id === orderId);
+  if (idx < 0) return null;
+  current[idx] = {
+    ...current[idx],
+    ...updates,
+    status: "paid",
+    paidAt: updates.paidAt || new Date().toISOString(),
+  };
+  await writeOrders(current);
+  return current[idx];
 }
