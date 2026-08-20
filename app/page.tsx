@@ -6,11 +6,12 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { TrustBadges } from "@/components/TrustBadges";
 import { UGCWall } from "@/components/UGCWall";
 import { GiftStory } from "@/components/GiftStory";
+import { ReviewWall } from "@/components/ReviewWall";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
 import { products } from "@/lib/data/products";
-import { faqs } from "@/lib/data/content";
+import { faqs, reviews } from "@/lib/data/content";
 
 export const metadata: Metadata = {
   title: "Custom Pet Embroidered Apparel — Turn Your Pet Into Something You Can Wear",
@@ -68,6 +69,13 @@ export default function HomePage() {
       <GiftStory />
 
       <UGCWall />
+
+      <section className="container-page section">
+        <h2 className="h-display mb-8 text-center text-3xl sm:text-4xl">
+          <Editable eid="home.reviews.title" fallback="Loved by pet people" />
+        </h2>
+        <ReviewWall reviews={reviews.slice(0, 3)} />
+      </section>
 
       {/* FAQ preview */}
       <section className="container-page section">

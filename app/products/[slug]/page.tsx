@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProduct, products } from "@/lib/data/products";
-import { reviews, faqs } from "@/lib/data/content";
+import { faqs } from "@/lib/data/content";
 import { Editable } from "@/components/editable/Editable";
 import { ProductDetail } from "@/components/ProductDetail";
 import { TrustBadges } from "@/components/TrustBadges";
-import { ReviewWall } from "@/components/ReviewWall";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { ProductGrid } from "@/components/ProductGrid";
 import { siteConfig } from "@/lib/config/site.config";
@@ -94,14 +93,6 @@ export default async function ProductPage({ params }: { params: { slug: string }
       <ProductDetail product={product} />
 
       <TrustBadges />
-
-      {/* Product reviews */}
-      <section className="section">
-        <h2 className="h-display mb-8 text-3xl">
-          <Editable eid="product.reviews.title" fallback="Reviews for this piece" />
-        </h2>
-        <ReviewWall reviews={reviews.slice(0, 3)} />
-      </section>
 
       {/* FAQ */}
       <section className="section">

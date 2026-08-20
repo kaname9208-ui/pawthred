@@ -4,7 +4,7 @@ import { Stars } from "@/components/Stars";
 
 export function ReviewWall({
   reviews,
-  showDemoNote = true,
+  showDemoNote = false,
 }: {
   reviews: Review[];
   showDemoNote?: boolean;
