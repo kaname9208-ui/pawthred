@@ -3,7 +3,6 @@ import Link from "next/link";
 import { HowItWorks } from "@/components/HowItWorks";
 import { ImageSlot } from "@/components/editable/ImageSlot";
 import { Editable } from "@/components/editable/Editable";
-import { howItWorks } from "@/lib/data/content";
 
 export const metadata: Metadata = {
   title: "How It Works — Custom Pet Embroidery in 4 Steps",
@@ -70,33 +69,6 @@ export default function HowItWorksPage() {
               <Editable eid="hiw.photo.cta" fallback="Start Your Custom Piece" />
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Step detail */}
-      <section className="bg-paper">
-        <div className="container-page section space-y-10">
-          {howItWorks.map((s, i) => (
-            <div key={s.step} className="grid gap-6 md:grid-cols-2 md:items-center">
-              <div className={i % 2 === 1 ? "md:order-2" : ""}>
-                <div className="mb-2 text-xs font-semibold text-warm-dark">STEP {s.step}</div>
-                <h3 className="h-display text-2xl">
-                  <Editable eid={`hiw.${i}.title`} fallback={s.title} />
-                </h3>
-                <p className="mt-3 text-[15px] text-muted">
-                  <Editable eid={`hiw.${i}.text`} fallback={s.text} />
-                </p>
-              </div>
-              <div className={i % 2 === 1 ? "md:order-1" : ""}>
-                <ImageSlot
-                  eid={`hiw.step.${i}.img`}
-                  ratio="16/10"
-                  tint={["#E7D8C9", "#D9D2C4", "#DFE0E8", "#E4DABF"][i % 4]}
-                  fallbackLabel={`Step ${s.step}`}
-                />
-              </div>
-            </div>
-          ))}
         </div>
       </section>
     </div>

@@ -6,30 +6,30 @@ import { ImageSlot } from "@/components/editable/ImageSlot";
 const steps = [
   {
     id: "step1",
-    step: "第一步",
-    title: "上传您的照片",
-    text: "选择你最喜欢的宠物照片。清晰、光线充足的镜头效果最佳——我们几乎接受所有镜头。",
+    step: "Step One",
+    title: "Upload your photo",
+    text: "Choose your favorite pet photo. Clear, well-lit photos work best, and we can work with almost any angle.",
     imgLeft: false,
   },
   {
     id: "step2",
-    step: "第二步",
-    title: "我们为您设计",
-    text: "我们的艺术家会将您的照片改编成定制刺绣设计，与您的服装和颜色相匹配。",
+    step: "Step Two",
+    title: "We create your design",
+    text: "Our artist turns your photo into a custom embroidery design made to match your chosen item and color.",
     imgLeft: true,
   },
   {
     id: "step3",
-    step: "第三步",
-    title: "你批准了",
-    text: "在生产前检查你的设计。变动很容易——我们希望它恰到好处。",
+    step: "Step Three",
+    title: "You approve it",
+    text: "Review your design before production. Small changes are easy, because we want it to feel just right.",
     imgLeft: true,
   },
   {
     id: "step4",
-    step: "第四步",
-    title: "穿上你的故事",
-    text: "您的定制作品会被刺绣并寄送到家门口，准备成为日常生活的一部分。",
+    step: "Step Four",
+    title: "Wear your story",
+    text: "Your custom piece is embroidered and shipped to your door, ready to become part of everyday life.",
     imgLeft: false,
   },
 ];
@@ -72,10 +72,10 @@ export function HowItWorks() {
                   {s.step}
                 </span>
                 <h3 className="font-display text-xl font-bold text-ink sm:text-2xl">
-                  <Editable eid={`hiw.${s.step}.title`} fallback={s.title} />
+                  <Editable eid={`hiw.${s.id}.title`} fallback={s.title} />
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-                  <Editable eid={`hiw.${s.step}.text`} fallback={s.text} />
+                  <Editable eid={`hiw.${s.id}.text`} fallback={s.text} />
                 </p>
               </div>
             </div>
