@@ -33,7 +33,7 @@ export function Hero() {
 
       <div className="relative aspect-square overflow-hidden rounded-xl2">
         <Image
-          src="/hero/hero-main-hoodie.png"
+          src="/hero/hero-main-hoodie.webp"
           alt="Custom embroidered pet hoodie with two dogs"
           fill
           sizes="(max-width: 1024px) 100vw, 48vw"

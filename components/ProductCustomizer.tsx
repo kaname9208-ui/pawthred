@@ -37,6 +37,8 @@ function ImageOptionPreview({
           src={images[type]}
           alt=""
           className="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
           draggable={false}
         />
       </span>

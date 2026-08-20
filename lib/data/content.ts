@@ -93,12 +93,12 @@ export const trustBadges = [
 ];
 
 export const ugcPosts = [
-  { handle: "@maria.k", tint: "#E7D8C9", ratio: "1/1", src: "/ugc/customer-01.png" },
-  { handle: "@thecolemanz", tint: "#D9D2C4", ratio: "1/1", src: "/ugc/customer-02.png" },
-  { handle: "@luna_and_max", tint: "#DFE0E8", ratio: "1/1", src: "/ugc/customer-03.png" },
-  { handle: "@jessbakes", tint: "#E4DABF", ratio: "1/1", src: "/ugc/customer-04.png" },
-  { handle: "@old.dog.new.threads", tint: "#E9D9C2", ratio: "1/1", src: "/ugc/customer-05.png" },
-  { handle: "@pets.and.co", tint: "#D8E0DC", ratio: "1/1", src: "/ugc/customer-06.png" },
+  { handle: "@maria.k", tint: "#E7D8C9", ratio: "1/1", src: "/ugc/customer-01.webp" },
+  { handle: "@thecolemanz", tint: "#D9D2C4", ratio: "1/1", src: "/ugc/customer-02.webp" },
+  { handle: "@luna_and_max", tint: "#DFE0E8", ratio: "1/1", src: "/ugc/customer-03.webp" },
+  { handle: "@jessbakes", tint: "#E4DABF", ratio: "1/1", src: "/ugc/customer-04.webp" },
+  { handle: "@old.dog.new.threads", tint: "#E9D9C2", ratio: "1/1", src: "/ugc/customer-05.webp" },
+  { handle: "@pets.and.co", tint: "#D8E0DC", ratio: "1/1", src: "/ugc/customer-06.webp" },
 ];
 
 // ============ 客户评价（明确标记为 Demo，避免伪造真实消费者） ============

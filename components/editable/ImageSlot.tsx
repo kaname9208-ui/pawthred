@@ -82,6 +82,8 @@ export function ImageSlot({
             src={src || fallbackSrc}
             alt={fallbackLabel ?? "custom image"}
             className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       ) : (
