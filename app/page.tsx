@@ -46,7 +46,13 @@ export default function HomePage() {
       {/* Embroidery close-up showcase */}
       <section className="bg-paper">
         <div className="container-page grid items-center gap-10 py-16 lg:grid-cols-2">
-          <ImageSlot eid="home.detail.img" ratio="4/5" tint="#E7D8C9" fallbackLabel="Embroidery Close-up" />
+          <ImageSlot
+            eid="home.detail.img"
+            ratio="4/5"
+            tint="#E7D8C9"
+            fallbackLabel="Embroidery Close-up"
+            fallbackSrc="/story/embroidery-detail.webp"
+          />
           <div>
             <span className="eyebrow">
               <Editable eid="home.detail.eyebrow" fallback="The Detail" />

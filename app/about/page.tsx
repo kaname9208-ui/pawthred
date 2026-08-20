@@ -47,7 +47,13 @@ export default function AboutPage() {
 
       <section className="bg-paper">
         <div className="container-page grid items-center gap-10 py-16 lg:grid-cols-2">
-          <ImageSlot eid="about.made.img" ratio="4/5" tint="#E4DABF" fallbackLabel="Made By Hand" />
+          <ImageSlot
+            eid="about.made.img"
+            ratio="4/5"
+            tint="#E4DABF"
+            fallbackLabel="Made By Hand"
+            fallbackSrc="/story/about-made.webp"
+          />
           <div>
             <h2 className="h-display text-3xl">
               <Editable eid="about.made.title" fallback="Made with care, not at scale" />

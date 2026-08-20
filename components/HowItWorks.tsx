@@ -10,6 +10,7 @@ const steps = [
     title: "Upload your photo",
     text: "Choose your favorite pet photo. Clear, well-lit photos work best, and we can work with almost any angle.",
     imgLeft: false,
+    image: "/how-it-works/step-1.webp",
   },
   {
     id: "step2",
@@ -17,6 +18,7 @@ const steps = [
     title: "We create your design",
     text: "Our artist turns your photo into a custom embroidery design made to match your chosen item and color.",
     imgLeft: true,
+    image: "/how-it-works/step-2.webp",
   },
   {
     id: "step3",
@@ -24,6 +26,7 @@ const steps = [
     title: "You approve it",
     text: "Review your design before production. Small changes are easy, because we want it to feel just right.",
     imgLeft: true,
+    image: "/how-it-works/step-3.webp",
   },
   {
     id: "step4",
@@ -31,6 +34,7 @@ const steps = [
     title: "Wear your story",
     text: "Your custom piece is embroidered and shipped to your door, ready to become part of everyday life.",
     imgLeft: false,
+    image: "/how-it-works/step-4.webp",
   },
 ];
 
@@ -63,6 +67,7 @@ export function HowItWorks() {
                   ratio="1/1"
                   tint="#F3ECE0"
                   fallbackLabel={s.title}
+                  fallbackSrc={s.image}
                 />
               </div>
 

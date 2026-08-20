@@ -72,35 +72,10 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
   const authedRef = useRef(authed);
   authedRef.current = authed;
 
-  // 初次加载：已发布的云端编辑先加载；管理员鉴权稍后再查，避免拖慢普通访客首屏。
+  // Front-end editing is disabled for storefront performance.
+  // Keep this provider as a lightweight compatibility layer for Editable/ImageSlot.
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const editsRes = await fetch("/api/edits");
-        const edits = await editsRes.json().catch(() => ({ text: {}, image: {} }));
-        if (cancelled) return;
-        setOverrides(sanitizeOverrides(edits));
-      } catch {
-        /* 离线/失败时不阻塞页面 */
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-
-    const checkAuth = () => {
-      fetch("/api/admin/check")
-        .then((res) => res.json())
-        .then((auth) => {
-          if (!cancelled) setAuthed(!!auth.authed);
-        })
-        .catch(() => {});
-    };
-    const idle = window.setTimeout(checkAuth, 1200);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(idle);
-    };
+    setLoading(false);
   }, []);
 
   // 发布当前编辑到云端（仅管理员）

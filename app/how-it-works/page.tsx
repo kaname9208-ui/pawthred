@@ -41,7 +41,13 @@ export default function HowItWorksPage() {
       {/* Photo guidance */}
       <section className="container-page section">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <ImageSlot eid="hiw.photo.img" ratio="4/5" tint="#E9E2D6" fallbackLabel="A Great Pet Photo" />
+          <ImageSlot
+            eid="hiw.photo.img"
+            ratio="4/5"
+            tint="#E9E2D6"
+            fallbackLabel="A Great Pet Photo"
+            fallbackSrc="/how-it-works/step-1.webp"
+          />
           <div>
             <span className="eyebrow">
               <Editable eid="hiw.photo.eyebrow" fallback="Photo Tips" />

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import { EditProvider } from "@/components/editable/EditProvider";
-import { EditorUI } from "@/components/editable/EditorUI";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -84,7 +83,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="min-h-[60vh]">{children}</main>
             <Footer />
           </CartProvider>
-          <EditorUI />
         </EditProvider>
       </body>
     </html>

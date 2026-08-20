@@ -6,7 +6,13 @@ export function GiftStory() {
   return (
     <section className="bg-paper">
       <div className="container-page grid items-center gap-10 py-16 sm:py-20 lg:grid-cols-2">
-        <ImageSlot eid="gift.img" ratio="4/5" tint="#E4DABF" fallbackLabel="A Gift They'll Never Forget" />
+        <ImageSlot
+          eid="gift.img"
+          ratio="4/5"
+          tint="#E4DABF"
+          fallbackLabel="A Gift They'll Never Forget"
+          fallbackSrc="/hero/hero-main-hoodie.webp"
+        />
         <div>
           <span className="eyebrow">
             <Editable eid="gift.eyebrow" fallback="For The Ones Who Matter" />
