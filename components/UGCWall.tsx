@@ -22,7 +22,13 @@ export function UGCWall() {
       <div className="grid grid-cols-3 gap-3 sm:gap-4 md:grid-cols-6">
         {ugcPosts.map((p, i) => (
           <div key={p.handle} className="space-y-2">
-            <ImageSlot eid={`ugc.${i}.img`} ratio={p.ratio} tint={p.tint} fallbackLabel={p.handle} />
+            <ImageSlot
+              eid={`ugc.${i}.img`}
+              ratio={p.ratio}
+              tint={p.tint}
+              fallbackLabel={p.handle}
+              fallbackSrc={p.src}
+            />
             <div className="text-center text-[12px] font-medium text-muted">
               <Editable eid={`ugc.${i}.handle`} fallback={p.handle} />
             </div>
