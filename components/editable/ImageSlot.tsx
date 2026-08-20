@@ -13,6 +13,7 @@ interface Props {
   fallbackSrc?: string;
   className?: string;
   rounded?: boolean;
+  eager?: boolean;
 }
 
 // 可编辑图片位：编辑模式下点击即可上传/替换你自己的图；
@@ -25,6 +26,7 @@ export function ImageSlot({
   fallbackSrc,
   className,
   rounded = true,
+  eager = false,
 }: Props) {
   const { editing, getImage, setImage, removeImage, setActive, uploadImage } = useEdit();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -82,8 +84,9 @@ export function ImageSlot({
             src={src || fallbackSrc}
             alt={fallbackLabel ?? "custom image"}
             className="absolute inset-0 h-full w-full object-cover"
-            loading="lazy"
-            decoding="async"
+            loading={eager ? "eager" : "lazy"}
+            fetchPriority={eager ? "high" : "auto"}
+            decoding={eager ? "sync" : "async"}
           />
         </div>
       ) : (

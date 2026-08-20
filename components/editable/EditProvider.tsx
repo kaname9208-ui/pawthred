@@ -72,19 +72,14 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
   const authedRef = useRef(authed);
   authedRef.current = authed;
 
-  // 初次加载：鉴权状态 + 已发布的云端编辑（所有访客可见）
+  // 初次加载：已发布的云端编辑先加载；管理员鉴权稍后再查，避免拖慢普通访客首屏。
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const [authRes, editsRes] = await Promise.all([
-          fetch("/api/admin/check"),
-          fetch("/api/edits"),
-        ]);
-        const auth = await authRes.json().catch(() => ({ authed: false }));
+        const editsRes = await fetch("/api/edits");
         const edits = await editsRes.json().catch(() => ({ text: {}, image: {} }));
         if (cancelled) return;
-        setAuthed(!!auth.authed);
         setOverrides(sanitizeOverrides(edits));
       } catch {
         /* 离线/失败时不阻塞页面 */
@@ -92,8 +87,19 @@ export function EditProvider({ children }: { children: React.ReactNode }) {
         if (!cancelled) setLoading(false);
       }
     })();
+
+    const checkAuth = () => {
+      fetch("/api/admin/check")
+        .then((res) => res.json())
+        .then((auth) => {
+          if (!cancelled) setAuthed(!!auth.authed);
+        })
+        .catch(() => {});
+    };
+    const idle = window.setTimeout(checkAuth, 1200);
     return () => {
       cancelled = true;
+      window.clearTimeout(idle);
     };
   }, []);
 

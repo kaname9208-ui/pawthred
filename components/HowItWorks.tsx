@@ -47,13 +47,13 @@ export function HowItWorks() {
           </h2>
         </div>
 
-        {/* 2×2 image+text grid — alternating layout like reference */}
-        <div className="grid gap-6 sm:gap-8 lg:gap-10 lg:grid-cols-2">
+        {/* 2x2 image+text grid, kept compact on phones too. */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-8 lg:gap-10">
           {steps.map((s) => (
             <div
               key={s.step}
-              className={`group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition-shadow hover:shadow-md ${
-                s.imgLeft ? "sm:flex-row" : "sm:flex-row-reverse"
+              className={`group flex min-w-0 overflow-hidden rounded-xl2 border border-line bg-white shadow-sm transition-shadow hover:shadow-md ${
+                s.imgLeft ? "flex-col sm:flex-row" : "flex-col sm:flex-row-reverse"
               }`}
             >
               {/* Image */}
@@ -67,14 +67,14 @@ export function HowItWorks() {
               </div>
 
               {/* Text */}
-              <div className="flex flex-col justify-center p-6 sm:p-8 sm:w-1/2">
-                <span className="mb-1 text-xs font-semibold uppercase tracking-wider text-warm-dark">
+              <div className="flex min-w-0 flex-col justify-center p-3 sm:w-1/2 sm:p-8">
+                <span className="mb-1 text-[10px] font-semibold uppercase text-warm-dark sm:text-xs">
                   {s.step}
                 </span>
-                <h3 className="font-display text-xl font-bold text-ink sm:text-2xl">
+                <h3 className="font-display text-base font-bold leading-tight text-ink sm:text-2xl">
                   <Editable eid={`hiw.${s.id}.title`} fallback={s.title} />
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+                <p className="mt-2 text-xs leading-relaxed text-muted sm:mt-3 sm:text-base">
                   <Editable eid={`hiw.${s.id}.text`} fallback={s.text} />
                 </p>
               </div>

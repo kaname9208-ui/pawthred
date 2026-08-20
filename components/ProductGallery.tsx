@@ -69,6 +69,16 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
   const activeColorLabel =
     activeSlide?.color?.label ?? colorChoices?.find((c) => c.value === selectedColor)?.label;
 
+  useEffect(() => {
+    if (!linkedImages) return;
+    slides.forEach((slide) => {
+      if (!slide.src || typeof window === "undefined") return;
+      const img = new window.Image();
+      img.decoding = "async";
+      img.src = slide.src;
+    });
+  }, [linkedImages, slides]);
+
   function selectSlide(next: number) {
     const slide = slides[next];
     setIndex(next);
@@ -89,6 +99,7 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
           fallbackLabel={activeSlide?.label ?? LABELS[index] ?? "Product image"}
           fallbackSrc={activeSlide?.src}
           className="mb-0"
+          eager
         />
         <button
           type="button"
@@ -131,6 +142,7 @@ export function ProductGallery({ slug, tint, colorChoices, selectedColor, onColo
               tint={tint}
               fallbackLabel={slide.label ?? LABELS[i] ?? "Product image"}
               fallbackSrc={slide.src}
+              eager={i < 3}
             />
           </div>
         ))}
