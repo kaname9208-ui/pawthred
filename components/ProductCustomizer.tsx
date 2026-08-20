@@ -31,8 +31,8 @@ function ImageOptionPreview({
   images: Record<string, string>;
 }) {
   return (
-    <span className="block">
-      <span className="relative mb-2 block aspect-square w-full overflow-hidden rounded-xl2 bg-white">
+      <span className="block">
+      <span className="relative mb-1.5 block aspect-square w-full overflow-hidden rounded-md bg-white sm:mb-2 sm:rounded-xl2">
         <img
           src={images[type]}
           alt=""
@@ -40,7 +40,9 @@ function ImageOptionPreview({
           draggable={false}
         />
       </span>
-      <span className="block text-[12.5px] font-semibold text-ink">{label}</span>
+      <span className="block text-[10.5px] font-semibold leading-tight text-ink sm:text-[12.5px]">
+        {label}
+      </span>
     </span>
   );
 }
@@ -172,13 +174,13 @@ export function ProductCustomizer({
             )}
 
             {opt.type === "select" && opt.id === "embroideryStyle" && opt.choices && (
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <div className="grid grid-cols-3 gap-2">
                 {opt.choices.map((c) => (
                   <button
                     key={c.value}
                     onClick={() => setOpt(opt.id, c.value)}
                     className={cn(
-                      "rounded-xl2 border bg-paper p-2 text-center transition-colors",
+                      "rounded-lg border bg-paper p-1.5 text-center transition-colors sm:rounded-xl2 sm:p-2",
                       selections[opt.id] === c.value
                         ? "border-ink ring-2 ring-ink/10"
                         : "border-line hover:border-ink/40"
@@ -191,13 +193,13 @@ export function ProductCustomizer({
             )}
 
             {opt.type === "select" && opt.id === "placement" && opt.choices && (
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <div className="grid grid-cols-3 gap-2">
                 {opt.choices.map((c) => (
                   <button
                     key={c.value}
                     onClick={() => setOpt(opt.id, c.value)}
                     className={cn(
-                      "min-h-[92px] rounded-xl2 border bg-paper p-3 text-center transition-colors",
+                      "rounded-lg border bg-paper p-1.5 text-center transition-colors sm:rounded-xl2 sm:p-3",
                       selections[opt.id] === c.value
                         ? "border-ink ring-2 ring-ink/10"
                         : "border-line hover:border-ink/40"
