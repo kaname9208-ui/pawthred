@@ -46,7 +46,7 @@ export default function HowItWorksPage() {
             ratio="4/5"
             tint="#E9E2D6"
             fallbackLabel="A Great Pet Photo"
-            fallbackSrc="/how-it-works/step-1.webp"
+            fallbackSrc="/how-it-works/good-photo.webp"
           />
           <div>
             <span className="eyebrow">
