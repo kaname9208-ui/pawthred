@@ -2,7 +2,7 @@
 // 注意：以下品牌名、文案、配色均为本项目自建，未复制任何参考站素材。
 export const siteConfig = {
   // 站点正式域名（上线后改成你的真实域名；也支持 NEXT_PUBLIC_SITE_URL 覆盖）
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://pawandthread.com",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.pawthread.shop",
   // 临时品牌占位，可经环境变量覆盖
   brandName: process.env.NEXT_PUBLIC_SITE_NAME || "PawThread",
   tagline: "Turn your pet into something you can wear.",
@@ -28,7 +28,7 @@ export const siteConfig = {
     pinterest: "#",
   },
   emailOffer: "Join the PawThread list",
-  contactEmail: "hello@pawandthread.com",
+  contactEmail: "hello@pawthread.shop",
 } as const;
 
 export type SiteConfig = typeof siteConfig;
