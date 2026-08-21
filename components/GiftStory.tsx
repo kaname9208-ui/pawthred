@@ -11,7 +11,7 @@ export function GiftStory() {
           ratio="4/5"
           tint="#E4DABF"
           fallbackLabel="A Gift They'll Never Forget"
-          fallbackSrc="/hero/hero-main-hoodie.webp"
+          fallbackSrc="/story/gift-photo.webp"
         />
         <div>
           <span className="eyebrow">
