@@ -30,8 +30,9 @@ export default function CartPage() {
     );
   }
 
-  const remaining = Math.max(0, siteConfig.freeShippingThreshold - total);
-  const progress = Math.min(100, (total / siteConfig.freeShippingThreshold) * 100);
+  const itemCount = items.reduce((sum, item) => sum + item.qty, 0);
+  const remainingItems = Math.max(0, siteConfig.freeShippingItemThreshold - itemCount);
+  const progress = Math.min(100, (itemCount / siteConfig.freeShippingItemThreshold) * 100);
 
   return (
     <div className="container-page section">
@@ -42,15 +43,14 @@ export default function CartPage() {
       {/* Free shipping progress */}
       <div className="mb-8 rounded-xl2 border border-line bg-paper p-4">
         <p className="text-[13.5px] text-charcoal">
-          {remaining > 0 ? (
+          {remainingItems > 0 ? (
             <>
-              <Editable eid="cart.freeShip.prefix" fallback="Add" />{" "}
-              <span className="font-semibold">{formatUSD(remaining)}</span>{" "}
-              <Editable eid="cart.freeShip.suffix" fallback="more for Free Shipping." />
+              Add <span className="font-semibold">{remainingItems}</span>{" "}
+              more item{remainingItems === 1 ? "" : "s"} for free shipping.
             </>
           ) : (
             <span className="font-semibold text-warm-dark">
-              <Editable eid="cart.freeShip.unlocked" fallback="You've unlocked Free Shipping! 🎉" />
+              You've unlocked free shipping.
             </span>
           )}
         </p>

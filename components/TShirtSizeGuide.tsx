@@ -17,7 +17,7 @@ const careItems = [
 
 export function TShirtSizeGuide() {
   return (
-    <section className="mt-14 rounded-xl2 border border-line bg-paper p-6 sm:p-8">
+    <section id="size-guide" className="mt-14 scroll-mt-24 rounded-xl2 border border-line bg-paper p-6 sm:p-8">
       <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr]">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-wider text-warm-dark">

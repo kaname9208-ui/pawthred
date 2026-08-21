@@ -196,6 +196,14 @@ export function ProductCustomizer({
             <h3 className="mb-3 font-display text-lg font-semibold text-ink">
               <Editable eid={`customizer.opt.${opt.id}`} fallback={opt.label} />
               {opt.required && <span className="ml-1 text-warm-dark">*</span>}
+              {opt.id === "size" && (
+                <a
+                  href="#size-guide"
+                  className="ml-3 align-middle text-[12px] font-medium text-warm-dark underline-offset-2 hover:underline"
+                >
+                  How to choose
+                </a>
+              )}
             </h3>
 
             {opt.type === "select" && opt.id === "color" && opt.choices && (

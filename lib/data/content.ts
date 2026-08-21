@@ -201,7 +201,7 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "How long does shipping take?",
-    a: "Standard shipping within the US typically takes 3–5 business days after production. Free shipping applies to all orders over $100. Orders under $100 have a flat $6 shipping fee.",
+    a: "Standard shipping within the US typically takes 3–5 business days after production. Buy 2 or more pieces for free shipping. Single-item orders have a flat $6 shipping fee.",
   },
   {
     q: "Can I preview my design before production?",

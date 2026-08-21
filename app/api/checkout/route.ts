@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { siteConfig } from "@/lib/config/site.config";
-import { bulkClothingDiscount, computeTotals } from "@/lib/pricing";
+import { computeTotals } from "@/lib/pricing";
 import { upsertOrder } from "@/lib/data/orders";
 import type { Category } from "@/lib/types";
 
@@ -79,8 +78,8 @@ export async function POST(req: NextRequest) {
     },
   }));
 
-  const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
-  const shipping = subtotal >= siteConfig.freeShippingThreshold ? 0 : siteConfig.shippingFee;
+  const totals = computeTotals(items);
+  const shipping = totals.shipping;
   if (shipping > 0) {
     line_items.push({
       quantity: 1,
@@ -95,20 +94,6 @@ export async function POST(req: NextRequest) {
   const { default: Stripe } = await import("stripe");
   const stripe = new Stripe(secret);
 
-  const discount = bulkClothingDiscount(items);
-  const couponId =
-    discount > 0
-      ? (
-          await stripe.coupons.create({
-            amount_off: Math.round(discount * 100),
-            currency: "usd",
-            duration: "once",
-            name: "Apparel bundle",
-          })
-        ).id
-      : undefined;
-
-  const totals = computeTotals(items);
   const orderId = `ord_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const createdAt = new Date().toISOString();
   const note = typeof body.note === "string" ? body.note.trim().slice(0, 800) : undefined;
@@ -135,7 +120,6 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items,
-      ...(couponId ? { discounts: [{ coupon: couponId }] } : {}),
       customer_email: body.email || undefined,
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
       cancel_url: `${origin}/cart`,
