@@ -105,9 +105,50 @@ export function ProductCustomizer({
   }
 
   const canAdd = photos.length > 0;
+  const sortedOptions = useMemo(() => {
+    const petName = product.options.find((opt) => opt.id === "petName");
+    const rest = product.options.filter((opt) => opt.id !== "petName");
+    return petName ? [...rest, petName] : product.options;
+  }, [product.options]);
+
+  const addPanel = (
+    <div className="rounded-xl2 border border-line bg-paper p-4 sm:p-5">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <div className="text-[12px] text-muted">
+            <Editable eid="customizer.yourPiece" fallback="Your custom piece" />
+          </div>
+          <div className="font-display text-2xl font-semibold text-ink">${price.toFixed(2)}</div>
+        </div>
+        {added ? (
+          <Link href="/cart" className="btn-primary shrink-0">
+            <Editable eid="customizer.viewCart" fallback="View Cart" />
+          </Link>
+        ) : (
+          <button
+            onClick={handleAdd}
+            disabled={!canAdd}
+            className="btn-primary shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Editable eid="customizer.add" fallback="Create My Custom Piece" />
+          </button>
+        )}
+      </div>
+      {!canAdd && (
+        <p className="mt-3 text-[13px] font-medium text-warm-dark">
+          <Editable eid="customizer.needPhoto" fallback="Please upload your pet photo first." />
+        </p>
+      )}
+      {added && (
+        <p className="mt-3 text-[13px] font-medium text-green-700">
+          <Editable eid="customizer.added" fallback="Added to cart! Review in your cart before checkout." />
+        </p>
+      )}
+    </div>
+  );
 
   return (
-    <div className="space-y-8">
+    <div id="customize" className="scroll-mt-24 space-y-8">
       {/* Upload */}
       <div>
         <h3 className="mb-3 font-display text-lg font-semibold text-ink">
@@ -150,7 +191,7 @@ export function ProductCustomizer({
 
       {/* Remaining options (color/size/placement/text) */}
       <div className="space-y-5">
-        {product.options.map((opt) => (
+        {sortedOptions.map((opt) => (
           <div key={opt.id}>
             <h3 className="mb-3 font-display text-lg font-semibold text-ink">
               <Editable eid={`customizer.opt.${opt.id}`} fallback={opt.label} />
@@ -242,52 +283,14 @@ export function ProductCustomizer({
                 className="w-full max-w-xs rounded-xl2 border border-line bg-paper px-4 py-3 text-sm outline-none focus:border-ink/40"
               />
             )}
+
+            {opt.id === "petName" && <div className="mt-5">{addPanel}</div>}
           </div>
         ))}
       </div>
 
-      {/* Price + Add (desktop) */}
-      <div className="hidden items-center justify-between gap-4 rounded-xl2 border border-line bg-paper p-5 lg:flex">
-        <div>
-          <div className="text-[12px] text-muted">
-            <Editable eid="customizer.yourPiece" fallback="Your custom piece" />
-          </div>
-          <div className="font-display text-2xl font-semibold text-ink">${price.toFixed(2)}</div>
-        </div>
-        {added ? (
-          <Link href="/cart" className="btn-primary">
-            <Editable eid="customizer.viewCart" fallback="View Cart →" />
-          </Link>
-        ) : (
-          <button
-            onClick={handleAdd}
-            disabled={!canAdd}
-            className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Editable eid="customizer.add" fallback="Create My Custom Piece" />
-          </button>
-        )}
-      </div>
-
-      {!canAdd && (
-        <p className="hidden text-[13px] font-medium text-warm-dark lg:block">
-          <Editable eid="customizer.needPhoto" fallback="Please upload your pet photo first." />
-        </p>
-      )}
-      {added && (
-        <p className="hidden text-[13px] font-medium text-green-700 lg:block">
-          <Editable eid="customizer.added" fallback="Added to cart! Review in your cart before checkout." />
-        </p>
-      )}
-
       {/* Mobile sticky CTA */}
-      <StickyCartCTA
-        price={price}
-        label={canAdd ? "Create My Custom Piece" : "Upload Photo First"}
-        disabled={!canAdd}
-        onClick={handleAdd}
-        hint={added ? "Added · " : "Your piece"}
-      />
+      <StickyCartCTA />
     </div>
   );
 }

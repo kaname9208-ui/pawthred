@@ -1,31 +1,36 @@
 "use client";
 
-import { Editable } from "@/components/editable/Editable";
+import Link from "next/link";
+import { useCart } from "@/components/CartProvider";
 
 interface Props {
-  price: number;
-  label: string;
-  disabled?: boolean;
-  onClick?: () => void;
-  hint?: string;
+  editTarget?: string;
 }
 
-// 移动端固定底栏 CTA（桌面端隐藏），如 "Create Yours — $59.99"
-export function StickyCartCTA({ price, label, disabled, onClick, hint }: Props) {
+// Mobile storefront cart bar. The product creation button lives inside the form;
+// this fixed bar only summarizes the cart and sends shoppers to checkout.
+export function StickyCartCTA({ editTarget = "#customize" }: Props) {
+  const { itemCount, grandTotal } = useCart();
+  const hasItems = itemCount > 0;
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-cream/95 p-3 backdrop-blur lg:hidden">
       <div className="container-page flex items-center gap-3 px-0">
-        <div className="flex-1">
-          <div className="text-[12px] text-muted">{hint ?? "Total"}</div>
-          <div className="font-semibold text-ink">${price.toFixed(2)}</div>
+        <div className="min-w-0 flex-1">
+          <a href={editTarget} className="text-[12px] font-medium text-warm-dark underline-offset-2 hover:underline">
+            Edit
+          </a>
+          <div className="mt-0.5 text-[12px] text-muted">
+            {hasItems ? `${itemCount} item${itemCount === 1 ? "" : "s"} in cart` : "Cart is empty"}
+          </div>
+          <div className="font-semibold text-ink">${grandTotal.toFixed(2)}</div>
         </div>
-        <button
-          onClick={onClick}
-          disabled={disabled}
-          className="btn-primary flex-1 disabled:cursor-not-allowed disabled:opacity-50"
+        <Link
+          href={hasItems ? "/cart" : editTarget}
+          className={hasItems ? "btn-primary flex-1 text-center" : "btn-primary flex-1 text-center opacity-60"}
         >
-          <Editable eid={disabled ? "customizer.ctaUpload" : "customizer.ctaCreate"} fallback={label} />
-        </button>
+          {hasItems ? "Checkout" : "Add Item First"}
+        </Link>
       </div>
     </div>
   );
